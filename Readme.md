@@ -40,3 +40,16 @@ Para tal efecto, se utilizará la tarjeta de desarrollo del MSP432, junto con el
  - Obtener `clang-format` para en el sistema operativo utilizado.
 
  - Ejecutar `./format.sh` desde la base del repositorio formatea todos los archivos `.hpp` y `.cpp` dentro del repositorio.
+
+ - Asegurarse de aplicar `./format.sh` para los _commits_.
+
+ - Se puede omitir el formato en parte del código:
+  ```cpp
+  ...
+  uint8_t l_u8VariableFormateadaConClangFormat;
+  // clang-format off
+  uint8_t      l_u8VariableNoFormateada=   4;
+  ...
+  // clang-format on
+  ...
+  ```
