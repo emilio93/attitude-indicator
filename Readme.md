@@ -34,3 +34,9 @@ Para tal efecto, se utilizará la tarjeta de desarrollo del MSP432, junto con el
   ```
 
  - Importar carpeta base del repositorio como un proyecto en CCS.
+
+### Usando Clang-Format
+
+ - Obtener `clang-format` para en el sistema operativo utilizado.
+
+ - Ejecutar `./format.sh` desde la base del repositorio formatea todos los archivos `.hpp` y `.cpp` dentro del repositorio.
