@@ -1,0 +1,3 @@
+[submodule "lib/mkii"]
+	path = lib/mkii
+	url = git@gitlab.com:programming_on_embedded_system/mkii.git
