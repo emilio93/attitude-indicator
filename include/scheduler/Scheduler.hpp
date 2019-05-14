@@ -15,6 +15,8 @@
 #define NUMBER_OF_SLOTS 255
 #define NULL 0
 
+namespace scheduler {
+
 // - This structure defines the Task Information
 struct st_TaskInfo {
 	Task* pToAttach;                    // - Pointer to the Task
@@ -44,5 +46,7 @@ class Scheduler {
 	    Task* i_pSchedule);  // - Sorts a schedule based on priority (not
 	                         // implemented)
 };
+
+}  // namespace scheduler
 
 #endif /* TASKS_SCHEDULER_HPP_ */

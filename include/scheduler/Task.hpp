@@ -6,6 +6,8 @@
 #define NO_ERR 0
 #define RET_ERR 1
 
+namespace scheduler {
+
 class Task {
  public:
 	Task();
@@ -25,5 +27,7 @@ class Task {
  protected:
 	bool m_bIsFinished;
 };
+
+}  // namespace scheduler
 
 #endif /* TASK_HPP_ */

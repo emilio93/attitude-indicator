@@ -1,6 +1,6 @@
-#include "Task.hpp"
+#include "scheduler/Task.hpp"
 
-Task::Task() {
+scheduler::Task::Task() {
 	m_u8TaskID = m_u8NextTaskID;
 	m_u8NextTaskID++;
 	m_bIsFinished = false;

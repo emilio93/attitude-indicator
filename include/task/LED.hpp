@@ -11,9 +11,11 @@
 
 #include "msp.h"
 
-#include "Task.hpp"
+#include "scheduler/Task.hpp"
 
-class LED : public Task {
+namespace task {
+
+class LED : public scheduler::Task {
  public:
 	LED(uint16_t);
 	uint16_t m_u16BITN;
@@ -23,5 +25,7 @@ class LED : public Task {
  protected:
  private:
 };
+
+}  // namespace task
 
 #endif /* LED_HPP_ */

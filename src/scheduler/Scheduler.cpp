@@ -1,7 +1,7 @@
-#include "Scheduler.hpp"
+#include "scheduler/Scheduler.hpp"
 
 // - Scheduler constructor
-Scheduler::Scheduler() {
+scheduler::Scheduler::Scheduler() {
 	m_u8OpenSlots = static_cast<uint8_t>(NUMBER_OF_SLOTS);
 	m_u8NextSlot = 0;
 	for (int index = 0; index < NUMBER_OF_SLOTS; index++) {
@@ -10,7 +10,7 @@ Scheduler::Scheduler() {
 	return;
 }
 // - The attach function, inserts the task into the schedule slots.
-uint8_t Scheduler::attach(Task* i_ToAttach, uint64_t i_u64TickInterval) {
+uint8_t scheduler::Scheduler::attach(Task* i_ToAttach, uint64_t i_u64TickInterval) {
 	uint8_t l_ErrorCode = NO_ERR;
 	st_TaskInfo l_st_StructToAttach;
 
@@ -29,7 +29,7 @@ uint8_t Scheduler::attach(Task* i_ToAttach, uint64_t i_u64TickInterval) {
 	return l_ErrorCode;
 }
 // - Execute the current schedule
-uint8_t Scheduler::run(void) {
+uint8_t scheduler::Scheduler::run(void) {
 	int l_iNextTaskSlot = 0U;
 	Task* l_pNextTask = (uintptr_t)0;
 	uint8_t l_u8ReturnCode = NO_ERR;
@@ -54,7 +54,7 @@ uint8_t Scheduler::run(void) {
 	return l_u8ReturnCode;
 }
 // - Execute the setup function for all tasks
-uint8_t Scheduler::setup(void) {
+uint8_t scheduler::Scheduler::setup(void) {
 	int l_iNextTaskSlot = 0U;
 	Task* l_pNextTask = (uintptr_t)0;
 	uint8_t l_u8ReturnCode = NO_ERR;
@@ -69,7 +69,7 @@ uint8_t Scheduler::setup(void) {
 	return l_u8ReturnCode;
 }
 
-uint8_t Scheduler::CalculateNextSchedule(void) { return (NO_ERR); }
-uint8_t Scheduler::SortScheduleByPriority(Task* i_pSchedule) {
+uint8_t scheduler::Scheduler::CalculateNextSchedule(void) { return (NO_ERR); }
+uint8_t scheduler::Scheduler::SortScheduleByPriority(Task* i_pSchedule) {
 	return (NO_ERR);
 }
