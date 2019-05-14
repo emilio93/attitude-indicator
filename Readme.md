@@ -26,3 +26,11 @@ Para tal efecto, se utilizará la tarjeta de desarrollo del MSP432, junto con el
 | (Extra) Inclinación lateral (roll) | Desplegar el horizonte dinámicamente usando el “roll”. | 5.00% |
 | (Extra)(Extra) Indicador de inclinación lateral | Desplegar una línea blanca que indique el “roll”. | 5.00% |
 
+### Obteniendo el Proyecto
+
+ - Obtener el repositorio:
+  ```bash
+  git clone git@gitlab.com:emilio93/ie1119-laboratorio2.git
+  ```
+
+ - Importar carpeta base del repositorio como un proyecto en CCS.
