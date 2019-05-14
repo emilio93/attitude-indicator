@@ -20,9 +20,9 @@ Para tal efecto, se utilizará la tarjeta de desarrollo del MSP432, junto con el
 | Condición inicial | El indicador de horizonte apuntará siempre al ángulo que indique el acelerómetro en el instante de encendido. | 10.00% |
 | Horizonte a nivel | Con el acelerómetro perfectamente nivelado, la pantalla mostrará 50% de la pantalla en azul, 50% en café. | 10.00% |
 | Rango de operación (pitch) | El indicador funcionará en un rango de 180°, con -90° siendo el indicador apuntando directamente al suelo (100% café), 0° siendo un horizonte perfectamente nivelado (50% azul) y con 90° siendo el indicador apuntando directamente hacia el cielo (100% azul). | 20.00% |
-| Velocidad de operación | El sistema deberá ser capaz de mostrar cambios de 90°/s como mínimo |20.00% |
+| Velocidad de operación | El sistema deberá ser capaz de mostrar cambios de 90°/s como mínimo. |20.00% |
 | Estándar de programación | El código deberá utilizar el estándar proporcionado por el profesor. | 10.00% |
 | Arquitectura del software | El problema deberá ser resuelto utilizando una arquitectura basada en “Scheduling”, como la vista en clase. | 25.00% |
 | (Extra) Inclinación lateral (roll) | Desplegar el horizonte dinámicamente usando el “roll”. | 5.00% |
-| (Extra)(Extra) Indicador de inclinación lateral | Desplegar una línea blanca que indique el “roll” | 5.00% |
+| (Extra)(Extra) Indicador de inclinación lateral | Desplegar una línea blanca que indique el “roll”. | 5.00% |
 
