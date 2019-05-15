@@ -15,6 +15,9 @@ uint8_t scheduler::Task::m_u8NextTaskID = 0;  // - Init task ID
 volatile static uint64_t g_SystemTicks = 0;   // - The system counter.
 scheduler::Scheduler g_MainScheduler;         // - Instantiate a Scheduler
 
+mkii::Led* g_pRedLed =
+    new mkii::Led(peripheral::gpio::Port::PORT1, peripheral::gpio::Pin::PIN0);
+
 void T32_INT1_IRQHandler(void);
 
 // #########################
@@ -69,15 +72,7 @@ void Setup(void) {
 	/* Enable Interrupts */
 	MAP_Interrupt_enableMaster();
 
-	// ****************************
-	//         PORT CONFIG
-	// ****************************
-	// - P1.0 is connected to the Red LED
-	// - This is the heart beat indicator.
-	mkii::Led* l_pRedLed =
-	    new mkii::Led(peripheral::gpio::Port::PORT1, peripheral::gpio::Pin::PIN0);
-	delete l_pRedLed;
-	l_pRedLed = NULL;
+	g_pRedLed->SetState(false);
 
 	// ****************************
 	//       TIMER CONFIG
@@ -95,12 +90,8 @@ void Setup(void) {
 // - Handle the Timer32 Interrupt
 void T32_INT1_IRQHandler(void) {
 	mkii::Timer::GetTimer(mkii::timer::TimerTypes::TIMER_32_0)->EndInterrupt();
-	mkii::Led* l_pRedLed = new mkii::Led(peripheral::gpio::Port::PORT1,
-	                                     peripheral::gpio::Pin::PIN0, false);
-	l_pRedLed->Toggle();
+	g_pRedLed->Toggle();
 	g_SystemTicks++;
-	delete l_pRedLed;
-	l_pRedLed = NULL;
 	mkii::Timer::GetTimer(mkii::timer::TimerTypes::TIMER_32_0)
 	    ->SetCounter(TIMER32_COUNT);
 	mkii::Timer::GetTimer(mkii::timer::TimerTypes::TIMER_32_0)
