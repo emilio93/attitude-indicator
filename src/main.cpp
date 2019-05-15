@@ -1,5 +1,6 @@
 #include "msp.h"
 
+#include "mkii/Led.hpp"
 #include "main.hpp"
 #include "task/LED.hpp"
 #include "scheduler/Scheduler.hpp"
@@ -16,14 +17,21 @@ scheduler::Scheduler g_MainScheduler;                   // - Instantiate a Sched
 //          MAIN
 // #########################
 void main(void) {
-	// - Instantiate two new Tasks
-	task::LED BlueLED(BIT2);
-	task::LED GreenLED(BIT1);
+	// Instantiate two new Led devices
+	mkii::Led* l_pGreenLed =
+	    new mkii::Led(peripheral::gpio::Port::PORT2, peripheral::gpio::Pin::PIN1);
+	mkii::Led* l_pBlueLed =
+	    new mkii::Led(peripheral::gpio::Port::PORT2, peripheral::gpio::Pin::PIN2);
+
+	// Instantiate two new Led tasks
+	task::LED* l_pBlueLedTask = new task::LED(l_pBlueLed);
+	task::LED* l_pGreenLedTask = new task::LED(l_pGreenLed);
 	// - Run the overall setup function for the system
 	Setup();
 	// - Attach the Tasks to the Scheduler;
-	g_MainScheduler.attach(&BlueLED, 500);
-	// g_MainScheduler.attach(&GreenLED, 300);
+	g_MainScheduler.attach(l_pBlueLedTask, 500);
+	// g_MainScheduler.attach(l_pGreenLedTask, 300);
+
 	// - Run the Setup for the scheduler and all tasks
 	g_MainScheduler.setup();
 	// - Main Loop
@@ -54,7 +62,10 @@ void Setup(void) {
 	// ****************************
 	// - P1.0 is connected to the Red LED
 	// - This is the heart beat indicator.
-	P1->DIR |= BIT0;  // Red LED
+	mkii::Led* l_pRedLed =
+	    new mkii::Led(peripheral::gpio::Port::PORT1, peripheral::gpio::Pin::PIN0);
+	delete l_pRedLed;
+	l_pRedLed = NULL;
 
 	// ****************************
 	//       TIMER CONFIG
@@ -79,8 +90,12 @@ extern "C" {
 // - Handle the Timer32 Interrupt
 void T32_INT1_IRQHandler(void) {
 	TIMER32_1->INTCLR = 0U;
-	P1->OUT ^= BIT0;  // - Toggle the heart beat indicator (1ms)
+	mkii::Led* l_pRedLed = new mkii::Led(peripheral::gpio::Port::PORT1,
+	                                     peripheral::gpio::Pin::PIN0, false);
+	l_pRedLed->Toggle();
 	g_SystemTicks++;
+	delete l_pRedLed;
+	l_pRedLed = NULL;
 	return;
 }
 }

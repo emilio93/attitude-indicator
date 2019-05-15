@@ -1,19 +1,17 @@
 #include "task/LED.hpp"
 
-task::LED::LED(uint16_t i_BITN) { m_u16BITN = i_BITN; }
+task::LED::LED(mkii::Led* i_pLed) { this->setLed(i_pLed); }
 
 uint8_t task::LED::run() {
-	//#########################
-	// Blink code Assuming PORT2
-	P2->OUT ^= m_u16BITN;
-	//#########################
+	this->getLed()->Toggle();
 	return (NO_ERR);
 }
 
 uint8_t task::LED::setup() {
-	// LED Setup, assuming PORT2
-	// - P2.0 is connected to the RGB LED
-	P2->DIR |= m_u16BITN;  // Red LED
-	P2->OUT &= m_u16BITN;  // Initialize the LED Value
+	// setup is done when the object was constructed.
 	return (NO_ERR);
 }
+
+void task::LED::setLed(mkii::Led* i_pLed) { this->m_pLed = i_pLed; }
+
+mkii::Led* task::LED::getLed(void) { return this->m_pLed; }
