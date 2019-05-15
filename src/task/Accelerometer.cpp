@@ -96,21 +96,37 @@ void task::Accelerometer::updateBackground() {
 	uint8_t l_u8YSeparation = 10;
 	bool l_isToggle = true;
 
-	if (l_u16Height > 40) {
-		l_u8YStart = l_u16Height - 40;
-		maxi = 4;
+	uint8_t l_u8OffsetBlue;
+	if (l_u16Height > 120) {
+		l_u8OffsetBlue = 120;
+	} else if (l_u16Height > 110) {
+		l_u8OffsetBlue = 110;
+	} else if (l_u16Height > 100) {
+		l_u8OffsetBlue = 100;
+	} else if (l_u16Height > 90) {
+		l_u8OffsetBlue = 90;
+	} else if (l_u16Height > 80) {
+		l_u8OffsetBlue = 80;
+	} else if (l_u16Height > 70) {
+		l_u8OffsetBlue = 70;
+	} else if (l_u16Height > 60) {
+		l_u8OffsetBlue = 60;
+	} else if (l_u16Height > 50) {
+		l_u8OffsetBlue = 50;
+	} else if (l_u16Height > 40) {
+		l_u8OffsetBlue = 40;
 	} else if (l_u16Height > 30) {
-		l_u8YStart = l_u16Height - 30;
-		maxi = 3;
+		l_u8OffsetBlue = 30;
 	} else if (l_u16Height > 20) {
-		l_u8YStart = l_u16Height - 20;
-		maxi = 2;
+		l_u8OffsetBlue = 20;
 	} else if (l_u16Height > 10) {
-		l_u8YStart = l_u16Height - 10;
-		maxi = 1;
+		l_u8OffsetBlue = 10;
 	} else {
-		maxi = 0;
+		l_u8OffsetBlue = 0;
 	}
+
+	l_u8YStart = l_u16Height - l_u8OffsetBlue;
+	maxi = l_u8OffsetBlue / 10;
 
 	for (i = 0; i < maxi; i++) {
 		j = l_isToggle ? l_u8XCenter - l_u8LongLineHalfLenght
@@ -122,16 +138,23 @@ void task::Accelerometer::updateBackground() {
 		               l_u8YStart + l_u8YSeparation * i);
 		l_isToggle = !l_isToggle;
 	}
-	if (l_u16Height > 47) {
-		l_u8YStart = l_u8YStart - 7;
-		for (i = 0; i < 5; i++) {
-			this->drawLine(l_u8XCenter - i, l_u8YStart + i, l_u8XCenter + i,
-			               l_u8YStart + i);
-		}
-	}
 
 	l_u8YStart = l_u16Height + 10;
-	if (l_u16Height < 77) {
+	if (l_u16Height < 7) {
+		maxi = 12;
+	} else if (l_u16Height < 17) {
+		maxi = 11;
+	} else if (l_u16Height < 27) {
+		maxi = 10;
+	} else if (l_u16Height < 37) {
+		maxi = 9;
+	} else if (l_u16Height < 47) {
+		maxi = 8;
+	} else if (l_u16Height < 57) {
+		maxi = 7;
+	} else if (l_u16Height < 67) {
+		maxi = 6;
+	} else if (l_u16Height < 77) {
 		maxi = 5;
 	} else if (l_u16Height < 87) {
 		maxi = 4;
