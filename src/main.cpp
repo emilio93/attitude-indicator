@@ -78,7 +78,6 @@ void Setup(void) {
 	//       TIMER CONFIG
 	// ****************************
 	// - Configure Timer32
-	MAP_Interrupt_enableMaster();
 	mkii::Timer* l_pTimer =
 	    mkii::Timer::GetTimer(mkii::timer::TimerTypes::TIMER_32_0);
 	l_pTimer->SetCounter(TIMER32_COUNT);
