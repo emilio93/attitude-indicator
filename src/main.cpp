@@ -1,6 +1,8 @@
 #include "msp.h"
 
 #include "mkii/Led.hpp"
+#include "mkii/Timer.hpp"
+
 #include "main.hpp"
 #include "task/LED.hpp"
 #include "scheduler/Scheduler.hpp"
@@ -12,6 +14,8 @@
 uint8_t scheduler::Task::m_u8NextTaskID = 0;            // - Init task ID
 volatile static uint64_t g_SystemTicks = 0;  // - The system counter.
 scheduler::Scheduler g_MainScheduler;                   // - Instantiate a Scheduler
+
+void T32_INT1_IRQHandler(void);
 
 // #########################
 //          MAIN
@@ -70,32 +74,28 @@ void Setup(void) {
 	// ****************************
 	//       TIMER CONFIG
 	// ****************************
-	// - Configure Timer32_1  with MCLK (3Mhz), Division by 1, Enable the
-	// interrupt, Periodic Mode
-	// - Enable the interrupt in the NVIC
-	// - Start the timer in UP mode.
-	// - Re-enable interrupts
-	TIMER32_1->LOAD = TIMER32_COUNT;  //~1ms ---> a 3Mhz
-	TIMER32_1->CONTROL = TIMER32_CONTROL_SIZE | TIMER32_CONTROL_PRESCALE_0 |
-	                     TIMER32_CONTROL_MODE | TIMER32_CONTROL_IE |
-	                     TIMER32_CONTROL_ENABLE;
-	NVIC_SetPriority(T32_INT1_IRQn, 1);
-	NVIC_EnableIRQ(T32_INT1_IRQn);
-	__enable_irq();
+	// - Configure Timer32
+	MAP_Interrupt_enableMaster();
+	mkii::Timer* l_pTimer =
+	    mkii::Timer::GetTimer(mkii::timer::TimerTypes::TIMER_32_0);
+	l_pTimer->SetCounter(TIMER32_COUNT);
+	l_pTimer->SetInterrupt(T32_INT1_IRQHandler);
 
 	return;
 }
 
-extern "C" {
 // - Handle the Timer32 Interrupt
 void T32_INT1_IRQHandler(void) {
-	TIMER32_1->INTCLR = 0U;
+	mkii::Timer::GetTimer(mkii::timer::TimerTypes::TIMER_32_0)->EndInterrupt();
 	mkii::Led* l_pRedLed = new mkii::Led(peripheral::gpio::Port::PORT1,
 	                                     peripheral::gpio::Pin::PIN0, false);
 	l_pRedLed->Toggle();
 	g_SystemTicks++;
 	delete l_pRedLed;
 	l_pRedLed = NULL;
+	mkii::Timer::GetTimer(mkii::timer::TimerTypes::TIMER_32_0)
+	    ->SetCounter(TIMER32_COUNT);
+	mkii::Timer::GetTimer(mkii::timer::TimerTypes::TIMER_32_0)
+	    ->SetInterrupt(T32_INT1_IRQHandler);
 	return;
-}
 }
