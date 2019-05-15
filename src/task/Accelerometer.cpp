@@ -66,10 +66,10 @@ void task::Accelerometer::updateBackground() {
 	Graphics_Rectangle l_stRectBrown;
 	if (this->m_u16Z > l_u16Threshold) {
 		l_u16Dif = (this->m_u16Z - l_u16Threshold) / l_u16Divider;
-		l_u16Height = 64 + l_u16Dif;
+		l_u16Height = 64 - l_u16Dif;
 	} else {
 		l_u16Dif = (l_u16Threshold - this->m_u16Z) / l_u16Divider;
-		l_u16Height = 64 - l_u16Dif;
+		l_u16Height = 64 + l_u16Dif;
 	}
 
 	l_stRectBlue = {0, 0, 127, l_u16Height};
