@@ -61,6 +61,14 @@ void Setup(void) {
 	// - Disable WDT
 	MAP_WDT_A_holdTimer();
 
+	/* Initializes Clock System */
+	MAP_CS_setDCOCenteredFrequency(CS_DCO_FREQUENCY_48);
+	MAP_CS_initClockSignal(CS_SMCLK, CS_DCOCLK_SELECT, CS_CLOCK_DIVIDER_1);
+	MAP_CS_initClockSignal(CS_MCLK, CS_DCOCLK_SELECT, CS_CLOCK_DIVIDER_1);
+
+	/* Enable Interrupts */
+	MAP_Interrupt_enableMaster();
+
 	// ****************************
 	//         PORT CONFIG
 	// ****************************
