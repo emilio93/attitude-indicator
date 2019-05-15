@@ -25,14 +25,14 @@ void T32_INT1_IRQHandler(void);
 // #########################
 void main(void) {
 	// Instantiate two new Led devices
-	mkii::Led* l_pGreenLed =
-	    new mkii::Led(peripheral::gpio::Port::PORT2, peripheral::gpio::Pin::PIN1);
+	// mkii::Led* l_pGreenLed =
+	//     new mkii::Led(peripheral::gpio::Port::PORT2, peripheral::gpio::Pin::PIN1);
 	mkii::Led* l_pBlueLed =
 	    new mkii::Led(peripheral::gpio::Port::PORT2, peripheral::gpio::Pin::PIN2);
 
 	// Instantiate two new Led tasks
+	// task::LED* l_pGreenLedTask = new task::LED(l_pGreenLed);
 	task::LED* l_pBlueLedTask = new task::LED(l_pBlueLed);
-	task::LED* l_pGreenLedTask = new task::LED(l_pGreenLed);
 	// - Run the overall setup function for the system
 	Setup();
 	// - Attach the Tasks to the Scheduler;
