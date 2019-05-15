@@ -1,11 +1,18 @@
 #include "msp.h"
 
+#include <ti/grlib/grlib.h>
+extern "C" {
+#include <Crystalfontz128x128_ST7735.h>
+}
+
+#include "mkii/Accelerometer.hpp"
 #include "mkii/Led.hpp"
 #include "mkii/Timer.hpp"
 
 #include "main.hpp"
 #include "scheduler/Scheduler.hpp"
 #include "scheduler/Task.hpp"
+#include "task/Accelerometer.hpp"
 #include "task/LED.hpp"
 
 // ##########################
@@ -18,28 +25,22 @@ scheduler::Scheduler g_MainScheduler;         // - Instantiate a Scheduler
 mkii::Led* g_pRedLed =
     new mkii::Led(peripheral::gpio::Port::PORT1, peripheral::gpio::Pin::PIN0);
 
+Graphics_Context g_sContext;
+
 void T32_INT1_IRQHandler(void);
 
 // #########################
 //          MAIN
 // #########################
 void main(void) {
-	// Instantiate two new Led devices
-	// mkii::Led* l_pGreenLed =
-	//     new mkii::Led(peripheral::gpio::Port::PORT2, peripheral::gpio::Pin::PIN1);
-	mkii::Led* l_pBlueLed =
-	    new mkii::Led(peripheral::gpio::Port::PORT2, peripheral::gpio::Pin::PIN2);
+	mkii::Accelerometer* l_pAccelerometer = new mkii::Accelerometer();
+	task::Accelerometer* l_pAccelerometerTask =
+	    new task::Accelerometer(l_pAccelerometer);
 
-	// Instantiate two new Led tasks
-	// task::LED* l_pGreenLedTask = new task::LED(l_pGreenLed);
-	task::LED* l_pBlueLedTask = new task::LED(l_pBlueLed);
-	// - Run the overall setup function for the system
 	Setup();
-	// - Attach the Tasks to the Scheduler;
-	g_MainScheduler.attach(l_pBlueLedTask, 500);
-	// g_MainScheduler.attach(l_pGreenLedTask, 300);
 
-	// - Run the Setup for the scheduler and all tasks
+	g_MainScheduler.attach(l_pAccelerometerTask, 10);
+
 	g_MainScheduler.setup();
 	// - Main Loop
 	while (1) {
@@ -58,16 +59,17 @@ void main(void) {
 // @output - none
 // **********************************
 void Setup(void) {
-	// ****************************
-	//         DEVICE CONFIG
-	// ****************************
-	// - Disable WDT
-	MAP_WDT_A_holdTimer();
+	WDT_A_holdTimer();
+	PCM_setCoreVoltageLevel(PCM_VCORE1);
+	FlashCtl_setWaitState(FLASH_BANK0, 2);
+	FlashCtl_setWaitState(FLASH_BANK1, 2);
 
 	/* Initializes Clock System */
-	MAP_CS_setDCOCenteredFrequency(CS_DCO_FREQUENCY_48);
-	MAP_CS_initClockSignal(CS_SMCLK, CS_DCOCLK_SELECT, CS_CLOCK_DIVIDER_1);
-	MAP_CS_initClockSignal(CS_MCLK, CS_DCOCLK_SELECT, CS_CLOCK_DIVIDER_1);
+	CS_setDCOCenteredFrequency(CS_DCO_FREQUENCY_48);
+	CS_initClockSignal(CS_MCLK, CS_DCOCLK_SELECT, CS_CLOCK_DIVIDER_1);
+	CS_initClockSignal(CS_HSMCLK, CS_DCOCLK_SELECT, CS_CLOCK_DIVIDER_1);
+	CS_initClockSignal(CS_SMCLK, CS_DCOCLK_SELECT, CS_CLOCK_DIVIDER_1);
+	CS_initClockSignal(CS_ACLK, CS_REFOCLK_SELECT, CS_CLOCK_DIVIDER_1);
 
 	/* Enable Interrupts */
 	MAP_Interrupt_enableMaster();
@@ -88,12 +90,11 @@ void Setup(void) {
 
 // - Handle the Timer32 Interrupt
 void T32_INT1_IRQHandler(void) {
-	mkii::Timer::GetTimer(mkii::timer::TimerTypes::TIMER_32_0)->EndInterrupt();
-	g_pRedLed->Toggle();
+	mkii::Timer* l_pTimer =
+	    mkii::Timer::GetTimer(mkii::timer::TimerTypes::TIMER_32_0);
+	l_pTimer->EndInterrupt();
 	g_SystemTicks++;
-	mkii::Timer::GetTimer(mkii::timer::TimerTypes::TIMER_32_0)
-	    ->SetCounter(TIMER32_COUNT);
-	mkii::Timer::GetTimer(mkii::timer::TimerTypes::TIMER_32_0)
-	    ->SetInterrupt(T32_INT1_IRQHandler);
+	l_pTimer->SetCounter(TIMER32_COUNT);
+	l_pTimer->SetInterrupt(T32_INT1_IRQHandler);
 	return;
 }
