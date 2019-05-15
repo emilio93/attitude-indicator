@@ -188,11 +188,11 @@ void task::Accelerometer::printResults() {
 	                            GRAPHICS_COLOR_BLACK);
 	sprintf(string, "X: %5d", this->m_u16X);
 	Graphics_drawString(&task::Accelerometer::m_stStaticContext, (int8_t*)string,
-	                    AUTO_STRING_LENGTH, 4, 100, OPAQUE_TEXT);
+	                    AUTO_STRING_LENGTH, 4, 100, TRANSPARENT_TEXT);
 	sprintf(string, "Y: %5d", this->m_u16Y);
 	Graphics_drawString(&task::Accelerometer::m_stStaticContext, (int8_t*)string,
-	                    AUTO_STRING_LENGTH, 4, 110, OPAQUE_TEXT);
+	                    AUTO_STRING_LENGTH, 4, 110, TRANSPARENT_TEXT);
 	sprintf(string, "Z: %5d", this->m_u16Z);
 	Graphics_drawString(&task::Accelerometer::m_stStaticContext, (int8_t*)string,
-	                    AUTO_STRING_LENGTH, 4, 120, OPAQUE_TEXT);
+	                    AUTO_STRING_LENGTH, 4, 120, TRANSPARENT_TEXT);
 }
