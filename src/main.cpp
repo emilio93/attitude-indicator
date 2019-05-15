@@ -4,16 +4,16 @@
 #include "mkii/Timer.hpp"
 
 #include "main.hpp"
-#include "task/LED.hpp"
 #include "scheduler/Scheduler.hpp"
 #include "scheduler/Task.hpp"
+#include "task/LED.hpp"
 
 // ##########################
 // Global/Static declarations
 // ##########################
-uint8_t scheduler::Task::m_u8NextTaskID = 0;            // - Init task ID
-volatile static uint64_t g_SystemTicks = 0;  // - The system counter.
-scheduler::Scheduler g_MainScheduler;                   // - Instantiate a Scheduler
+uint8_t scheduler::Task::m_u8NextTaskID = 0;  // - Init task ID
+volatile static uint64_t g_SystemTicks = 0;   // - The system counter.
+scheduler::Scheduler g_MainScheduler;         // - Instantiate a Scheduler
 
 void T32_INT1_IRQHandler(void);
 

@@ -10,7 +10,8 @@ scheduler::Scheduler::Scheduler() {
 	return;
 }
 // - The attach function, inserts the task into the schedule slots.
-uint8_t scheduler::Scheduler::attach(Task* i_ToAttach, uint64_t i_u64TickInterval) {
+uint8_t scheduler::Scheduler::attach(Task* i_ToAttach,
+                                     uint64_t i_u64TickInterval) {
 	uint8_t l_ErrorCode = NO_ERR;
 	st_TaskInfo l_st_StructToAttach;
 
