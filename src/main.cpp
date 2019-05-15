@@ -59,7 +59,7 @@ void Setup(void) {
 	//         DEVICE CONFIG
 	// ****************************
 	// - Disable WDT
-	WDT_A->CTL = WDT_A_CTL_PW | WDT_A_CTL_HOLD;
+	MAP_WDT_A_holdTimer();
 
 	// ****************************
 	//         PORT CONFIG
