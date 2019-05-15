@@ -31,6 +31,12 @@ Para tal efecto, se utilizará la tarjeta de desarrollo del MSP432, junto con el
  - Obtener el repositorio:
   ```bash
   git clone git@gitlab.com:emilio93/ie1119-laboratorio2.git
+  cd ie1119-laboratorio2
+  git submodule init
+  git submodule update
+  cd lib/mkii
+  git submodule init
+  git submodule update
   ```
 
  - Importar carpeta base del repositorio como un proyecto en CCS.

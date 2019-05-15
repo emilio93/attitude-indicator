@@ -1,29 +1,44 @@
 #include "msp.h"
 
+#include "mkii/Led.hpp"
+#include "mkii/Timer.hpp"
+
 #include "main.hpp"
-#include "task/LED.hpp"
 #include "scheduler/Scheduler.hpp"
 #include "scheduler/Task.hpp"
+#include "task/LED.hpp"
 
 // ##########################
 // Global/Static declarations
 // ##########################
-uint8_t scheduler::Task::m_u8NextTaskID = 0;            // - Init task ID
-volatile static uint64_t g_SystemTicks = 0;  // - The system counter.
-scheduler::Scheduler g_MainScheduler;                   // - Instantiate a Scheduler
+uint8_t scheduler::Task::m_u8NextTaskID = 0;  // - Init task ID
+volatile static uint64_t g_SystemTicks = 0;   // - The system counter.
+scheduler::Scheduler g_MainScheduler;         // - Instantiate a Scheduler
+
+mkii::Led* g_pRedLed =
+    new mkii::Led(peripheral::gpio::Port::PORT1, peripheral::gpio::Pin::PIN0);
+
+void T32_INT1_IRQHandler(void);
 
 // #########################
 //          MAIN
 // #########################
 void main(void) {
-	// - Instantiate two new Tasks
-	task::LED BlueLED(BIT2);
-	task::LED GreenLED(BIT1);
+	// Instantiate two new Led devices
+	// mkii::Led* l_pGreenLed =
+	//     new mkii::Led(peripheral::gpio::Port::PORT2, peripheral::gpio::Pin::PIN1);
+	mkii::Led* l_pBlueLed =
+	    new mkii::Led(peripheral::gpio::Port::PORT2, peripheral::gpio::Pin::PIN2);
+
+	// Instantiate two new Led tasks
+	// task::LED* l_pGreenLedTask = new task::LED(l_pGreenLed);
+	task::LED* l_pBlueLedTask = new task::LED(l_pBlueLed);
 	// - Run the overall setup function for the system
 	Setup();
 	// - Attach the Tasks to the Scheduler;
-	g_MainScheduler.attach(&BlueLED, 500);
-	// g_MainScheduler.attach(&GreenLED, 300);
+	g_MainScheduler.attach(l_pBlueLedTask, 500);
+	// g_MainScheduler.attach(l_pGreenLedTask, 300);
+
 	// - Run the Setup for the scheduler and all tasks
 	g_MainScheduler.setup();
 	// - Main Loop
@@ -47,40 +62,38 @@ void Setup(void) {
 	//         DEVICE CONFIG
 	// ****************************
 	// - Disable WDT
-	WDT_A->CTL = WDT_A_CTL_PW | WDT_A_CTL_HOLD;
+	MAP_WDT_A_holdTimer();
 
-	// ****************************
-	//         PORT CONFIG
-	// ****************************
-	// - P1.0 is connected to the Red LED
-	// - This is the heart beat indicator.
-	P1->DIR |= BIT0;  // Red LED
+	/* Initializes Clock System */
+	MAP_CS_setDCOCenteredFrequency(CS_DCO_FREQUENCY_48);
+	MAP_CS_initClockSignal(CS_SMCLK, CS_DCOCLK_SELECT, CS_CLOCK_DIVIDER_1);
+	MAP_CS_initClockSignal(CS_MCLK, CS_DCOCLK_SELECT, CS_CLOCK_DIVIDER_1);
+
+	/* Enable Interrupts */
+	MAP_Interrupt_enableMaster();
+
+	g_pRedLed->SetState(false);
 
 	// ****************************
 	//       TIMER CONFIG
 	// ****************************
-	// - Configure Timer32_1  with MCLK (3Mhz), Division by 1, Enable the
-	// interrupt, Periodic Mode
-	// - Enable the interrupt in the NVIC
-	// - Start the timer in UP mode.
-	// - Re-enable interrupts
-	TIMER32_1->LOAD = TIMER32_COUNT;  //~1ms ---> a 3Mhz
-	TIMER32_1->CONTROL = TIMER32_CONTROL_SIZE | TIMER32_CONTROL_PRESCALE_0 |
-	                     TIMER32_CONTROL_MODE | TIMER32_CONTROL_IE |
-	                     TIMER32_CONTROL_ENABLE;
-	NVIC_SetPriority(T32_INT1_IRQn, 1);
-	NVIC_EnableIRQ(T32_INT1_IRQn);
-	__enable_irq();
+	// - Configure Timer32
+	mkii::Timer* l_pTimer =
+	    mkii::Timer::GetTimer(mkii::timer::TimerTypes::TIMER_32_0);
+	l_pTimer->SetCounter(TIMER32_COUNT);
+	l_pTimer->SetInterrupt(T32_INT1_IRQHandler);
 
 	return;
 }
 
-extern "C" {
 // - Handle the Timer32 Interrupt
 void T32_INT1_IRQHandler(void) {
-	TIMER32_1->INTCLR = 0U;
-	P1->OUT ^= BIT0;  // - Toggle the heart beat indicator (1ms)
+	mkii::Timer::GetTimer(mkii::timer::TimerTypes::TIMER_32_0)->EndInterrupt();
+	g_pRedLed->Toggle();
 	g_SystemTicks++;
+	mkii::Timer::GetTimer(mkii::timer::TimerTypes::TIMER_32_0)
+	    ->SetCounter(TIMER32_COUNT);
+	mkii::Timer::GetTimer(mkii::timer::TimerTypes::TIMER_32_0)
+	    ->SetInterrupt(T32_INT1_IRQHandler);
 	return;
-}
 }

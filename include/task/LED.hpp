@@ -11,19 +11,25 @@
 
 #include "msp.h"
 
+#include "mkii/Led.hpp"
+
 #include "scheduler/Task.hpp"
 
 namespace task {
 
 class LED : public scheduler::Task {
  public:
-	LED(uint16_t);
-	uint16_t m_u16BITN;
+	LED(mkii::Led* i_pLed);
 	virtual uint8_t run(void);
 	virtual uint8_t setup(void);
 
  protected:
  private:
+	mkii::Led* m_pLed;
+
+	void setLed(mkii::Led* i_pLed);
+
+	mkii::Led* getLed(void);
 };
 
 }  // namespace task
