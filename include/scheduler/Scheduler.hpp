@@ -1,12 +1,7 @@
-/*
- * Scheduler.hpp
- *
- *  Created on: Aug 31, 2016
- *      Author: eortiz
- */
+#ifndef SCHEDULER_SCHEDULER_HPP_
+#define SCHEDULER_SCHEDULER_HPP_
 
-#ifndef TASKS_SCHEDULER_HPP_
-#define TASKS_SCHEDULER_HPP_
+#include <cstddef>
 
 #include "msp.h"
 
@@ -49,4 +44,4 @@ class Scheduler {
 
 }  // namespace scheduler
 
-#endif /* TASKS_SCHEDULER_HPP_ */
+#endif /* SCHEDULER_SCHEDULER_HPP_ */

@@ -1,5 +1,7 @@
-#ifndef TASK_HPP_
-#define TASK_HPP_
+#ifndef SCHEDULER_TASK_HPP_
+#define SCHEDULER_TASK_HPP_
+
+#include <cstddef>
 
 #include "msp.h"
 
@@ -30,4 +32,4 @@ class Task {
 
 }  // namespace scheduler
 
-#endif /* TASK_HPP_ */
+#endif /* SCHEDULER_TASK_HPP_ */

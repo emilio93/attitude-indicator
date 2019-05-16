@@ -1,15 +1,7 @@
-/*
- * LED.hpp
- *
- *  Created on: Aug 31, 2016
- *      Author: eortiz
- */
+#ifndef TASK_LED_HPP_
+#define TASK_LED_HPP_
 
-#ifndef LED_HPP_
-#define LED_HPP_
-#define __NOP __nop
-
-#include "msp.h"
+#include <cstddef>
 
 #include "mkii/Led.hpp"
 
@@ -34,4 +26,4 @@ class LED : public scheduler::Task {
 
 }  // namespace task
 
-#endif /* LED_HPP_ */
+#endif /* TASK_LED_HPP_ */

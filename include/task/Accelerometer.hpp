@@ -1,8 +1,7 @@
 #ifndef TASK_ACCELEROMETER_HPP_
 #define TASK_ACCELEROMETER_HPP_
-#define __NOP __nop
 
-#include "msp.h"
+#include <cstddef>
 
 #include <ti/grlib/grlib.h>
 extern "C" {
@@ -48,4 +47,4 @@ class Accelerometer : public scheduler::Task {
 
 }  // namespace task
 
-#endif /* LED_HPP_ */
+#endif /* TASK_ACCELEROMETER_HPP_ */
