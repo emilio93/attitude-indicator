@@ -26,6 +26,12 @@ Para tal efecto, se utilizará la tarjeta de desarrollo del MSP432, junto con el
 | (Extra) Inclinación lateral (roll) | Desplegar el horizonte dinámicamente usando el “roll”. | 5.00% |
 | (Extra)(Extra) Indicador de inclinación lateral | Desplegar una línea blanca que indique el “roll”. | 5.00% |
 
+### Requisitos
+
+ - Se debe tener instalado [Code Composer Studio 9](http://processors.wiki.ti.com/index.php/Download_CCS).
+
+ - Se debe tener instalado Simplelink MSP432P4 SDK 3.10. Esto se hace desde el Resource Explorer en CCS.
+
 ### Obteniendo el Proyecto
 
  - Obtener el repositorio:
