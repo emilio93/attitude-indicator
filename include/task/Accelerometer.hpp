@@ -27,6 +27,8 @@ class Accelerometer : public scheduler::Task {
 	uint16_t m_u16Y;
 	uint16_t m_u16Z;
 
+	uint16_t m_u16OldZValue;
+
 	static Graphics_Context m_stStaticContext;
 
 	mkii::Accelerometer* m_pAccelerometer;
