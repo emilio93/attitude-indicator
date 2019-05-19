@@ -4,9 +4,6 @@
 #include <cstddef>
 
 #include <ti/grlib/grlib.h>
-extern "C" {
-#include <Crystalfontz128x128_ST7735.h>
-}
 
 #include "mkii/Accelerometer.hpp"
 
