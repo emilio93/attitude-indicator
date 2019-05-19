@@ -7,10 +7,7 @@ task::Accelerometer::Accelerometer(mkii::Accelerometer* i_pAccelerometer) {
 }
 
 uint8_t task::Accelerometer::run() {
-	this->m_u16X = ADC14_getResult(ADC_MEM0);
-	this->m_u16Y = ADC14_getResult(ADC_MEM1);
-	this->m_u16Z = ADC14_getResult(ADC_MEM2);
-
+	this->getAccelerometer()->UpdateResults();
 	this->getAccelerometer()->TriggerConversion();
 
 	return (NO_ERR);

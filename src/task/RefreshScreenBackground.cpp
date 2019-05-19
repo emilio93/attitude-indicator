@@ -31,6 +31,10 @@ uint8_t task::RefreshScreenBackground::run(void) {
 	uint16_t l_u16Dif;
 	uint16_t l_u16Height;
 
+	this->m_u16X = mkii::Accelerometer::GetX();
+	this->m_u16Y = mkii::Accelerometer::GetY();
+	this->m_u16Z = mkii::Accelerometer::GetZ();
+
 	Graphics_Rectangle l_stRectBlue;
 	Graphics_Rectangle l_stRectBrown;
 
