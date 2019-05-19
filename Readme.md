@@ -65,3 +65,7 @@ Para tal efecto, se utilizará la tarjeta de desarrollo del MSP432, junto con el
   // clang-format on
   ...
   ```
+
+### Generando Documentación con Doxygen
+
+Correr `doxygen` en la base del repositorio. Se genera la documentación en la carpeta `docs`.
