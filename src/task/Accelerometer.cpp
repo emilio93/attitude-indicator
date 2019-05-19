@@ -11,7 +11,6 @@ uint8_t task::Accelerometer::run() {
 	this->m_u16Y = ADC14_getResult(ADC_MEM1);
 	this->m_u16Z = ADC14_getResult(ADC_MEM2);
 
-	this->printResults();
 	this->getAccelerometer()->TriggerConversion();
 
 	return (NO_ERR);

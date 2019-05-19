@@ -3,16 +3,17 @@
 #include "task/RefreshScreenBackground.hpp"
 
 task::RefreshScreenBackground::RefreshScreenBackground(
-    mkii::LcdScreen* i_pLcdScreen, Graphics_Context i_stContext) {
+    peripheral::LcdScreen* i_pLcdScreen, Graphics_Context i_stContext) {
 	this->setLcdScreen(i_pLcdScreen);
 	this->setContext(i_stContext);
 }
 
 uint8_t task::RefreshScreenBackground::setup(void) {
-	Crystalfontz128x128_Init();
-	Crystalfontz128x128_SetOrientation(LCD_ORIENTATION_UP);
-	Graphics_initContext(&this->getContext(), &g_sCrystalfontz128x128,
-	                     &g_sCrystalfontz128x128_funcs);
+	this->getLcdScreen()->Init();
+	this->getLcdScreen()->SetOrientation(peripheral::lcdScreen::ORIENTATION_UP);
+	Graphics_initContext(&this->getContext(),
+	                     &peripheral::LcdScreen::GetCrystalfontz128x128(),
+	                     &peripheral::LcdScreen::GetCrystalfontz128x128_funcs());
 	Graphics_setBackgroundColor(&this->getContext(), GRAPHICS_COLOR_WHITE);
 	GrContextFontSet(&this->getContext(), &g_sFontFixed6x8);
 }
@@ -104,11 +105,11 @@ uint8_t task::RefreshScreenBackground::run(void) {
 }
 
 void task::RefreshScreenBackground::setLcdScreen(
-    mkii::LcdScreen* i_pLcdScreen) {
+    peripheral::LcdScreen* i_pLcdScreen) {
 	this->m_pLcdScreen = i_pLcdScreen;
 }
 
-mkii::LcdScreen* task::RefreshScreenBackground::getLcdScreen(void) {
+peripheral::LcdScreen* task::RefreshScreenBackground::getLcdScreen(void) {
 	return this->m_pLcdScreen;
 }
 
