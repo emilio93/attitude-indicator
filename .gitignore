@@ -4,4 +4,7 @@ Debug/
 .launches/
 targetConfigs/readme.txt
 
+# Doxygen
+docs
+
 .vscode/
