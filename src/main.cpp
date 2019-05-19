@@ -35,7 +35,8 @@ void main(void) {
 	task::Accelerometer* l_pAccelerometerTask =
 	    new task::Accelerometer(l_pAccelerometer);
 
-	mkii::LcdScreen* l_pLcdScreen = new mkii::LcdScreen(NULL);
+	peripheral::LcdScreen* l_pLcdScreen =
+	    new peripheral::LcdScreen(new peripheral::lcdScreen::Spi());
 	task::RefreshScreenBackground* l_pRefreshScreenBackground =
 	    new task::RefreshScreenBackground(l_pLcdScreen, g_sContext);
 

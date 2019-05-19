@@ -5,7 +5,7 @@
 
 #include <ti/grlib/grlib.h>
 
-#include "mkii/LcdScreen.hpp"
+#include "peripheral/LcdScreen.hpp"
 
 #include "scheduler/Task.hpp"
 
@@ -13,7 +13,7 @@ namespace task {
 
 class RefreshScreenBackground : public scheduler::Task {
  public:
-	RefreshScreenBackground(mkii::LcdScreen* i_pLcdScreen,
+	RefreshScreenBackground(peripheral::LcdScreen* i_pLcdScreen,
 	                        Graphics_Context i_stContext);
 
 	/**
@@ -35,14 +35,14 @@ class RefreshScreenBackground : public scheduler::Task {
 	 *
 	 * @param i_pLcdScreen The LcdScreen object.
 	 */
-	void setLcdScreen(mkii::LcdScreen* i_pLcdScreen);
+	void setLcdScreen(peripheral::LcdScreen* i_pLcdScreen);
 
 	/**
 	 * Get the LcdScreen object.
 	 *
-	 * @return mkii::LcdScreen* The LcdScreen object.
+	 * @return peripheral::LcdScreen* The LcdScreen object.
 	 */
-	mkii::LcdScreen* getLcdScreen(void);
+	peripheral::LcdScreen* getLcdScreen(void);
 
 	/**
 	 * Set the Context data.
@@ -80,7 +80,7 @@ class RefreshScreenBackground : public scheduler::Task {
 	/**
 	 * The LcdScreen Object.
 	 */
-	mkii::LcdScreen* m_pLcdScreen;
+	peripheral::LcdScreen* m_pLcdScreen;
 };
 
 }  // namespace task
