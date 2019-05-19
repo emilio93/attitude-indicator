@@ -1,10 +1,6 @@
 #include "msp.h"
 
 #include <ti/grlib/grlib.h>
-extern "C" {
-#include <Crystalfontz128x128_ST7735.h>
-}
-
 #include "mkii/Accelerometer.hpp"
 #include "mkii/LcdScreen.hpp"
 #include "mkii/Led.hpp"
