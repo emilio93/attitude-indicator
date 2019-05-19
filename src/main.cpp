@@ -6,6 +6,7 @@ extern "C" {
 }
 
 #include "mkii/Accelerometer.hpp"
+#include "mkii/LcdScreen.hpp"
 #include "mkii/Led.hpp"
 #include "mkii/Timer.hpp"
 
@@ -14,6 +15,7 @@ extern "C" {
 #include "scheduler/Task.hpp"
 #include "task/Accelerometer.hpp"
 #include "task/LED.hpp"
+#include "task/RefreshScreenBackground.hpp"
 
 // ##########################
 // Global/Static declarations
@@ -37,9 +39,14 @@ void main(void) {
 	task::Accelerometer* l_pAccelerometerTask =
 	    new task::Accelerometer(l_pAccelerometer);
 
+	mkii::LcdScreen* l_pLcdScreen = new mkii::LcdScreen(NULL);
+	task::RefreshScreenBackground* l_pRefreshScreenBackground =
+	    new task::RefreshScreenBackground(l_pLcdScreen, g_sContext);
+
 	Setup();
 
 	g_MainScheduler.attach(l_pAccelerometerTask, 10);
+	g_MainScheduler.attach(l_pRefreshScreenBackground, 30);
 
 	g_MainScheduler.setup();
 	// - Main Loop
