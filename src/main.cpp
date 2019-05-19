@@ -2,7 +2,6 @@
 
 #include <ti/grlib/grlib.h>
 #include "mkii/Accelerometer.hpp"
-#include "mkii/LcdScreen.hpp"
 #include "mkii/Led.hpp"
 #include "mkii/Timer.hpp"
 
