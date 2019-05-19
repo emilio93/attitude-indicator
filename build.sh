@@ -1,5 +1,6 @@
 #!/bin/bash
 
+declare TI_CARD_ID='0451:bef3'
 declare CCS_PATH
 declare CCS_LOAD_UTIL=ccs/ccs_base/scripting/examples/loadti/loadti.sh
 declare CCS_MAKE_UTIL=ccs/utils/bin/gmake
@@ -24,7 +25,8 @@ then
 	    exit 2 ; }			   
 	PROJ_TARGOUT=$OUT_FILE
     done
-    $CCS_PATH/$CCS_LOAD_UTIL -c $PROJ_TARGCNF -l $PROJ_TARGOUT
+    lsusb -d $TI_CARD_ID &&
+	$CCS_PATH/$CCS_LOAD_UTIL -c $PROJ_TARGCNF -l $PROJ_TARGOUT
 else
     printf 'Error: CCS_PATH not found.\n' &>/dev/stderr
     exit 1
