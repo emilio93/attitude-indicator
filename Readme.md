@@ -68,7 +68,7 @@ Para tal efecto, se utilizará la tarjeta de desarrollo del MSP432, junto con el
 
 ### Compilando el Código
 
-Se puede utilizar el script `build.sh` para compilar el proyecto. Este script utiliza la ruta al compilador por defecto.
+Se puede utilizar el script `build.sh` para compilar y cargar el proyecto en la tarjeta. Este script utiliza la ruta al compilador por defecto.
 
 ### Generando Documentación con Doxygen
 
