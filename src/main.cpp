@@ -39,12 +39,13 @@ void main(void) {
 	task::RefreshScreenBackground* l_pRefreshScreenBackground =
 	    new task::RefreshScreenBackground(l_pLcdScreen, g_pContext);
 
-	Setup();
-
 	g_MainScheduler.attach(l_pAccelerometerTask, 10);
 	g_MainScheduler.attach(l_pRefreshScreenBackground, 30);
 
 	g_MainScheduler.setup();
+
+	Setup();
+
 	// - Main Loop
 	while (1) {
 		__wfe();  // Wait for Event
