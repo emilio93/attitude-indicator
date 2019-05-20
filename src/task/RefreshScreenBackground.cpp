@@ -19,14 +19,14 @@ uint8_t task::RefreshScreenBackground::setup(void) {
 }
 
 uint8_t task::RefreshScreenBackground::run(void) {
-	uint16_t l_u16Threshold = 512;
+	uint16_t l_u16Threshold = 8192;
 
-	uint16_t l_u16LimitThreshold = 208;
+	uint16_t l_u16LimitThreshold = 3258;
 	uint16_t l_u16TopLimit = l_u16Threshold + l_u16LimitThreshold;
 	uint16_t l_u16BottomLimit = l_u16Threshold - l_u16LimitThreshold;
 
-	uint16_t l_u16MinDelta = 5;
-	uint16_t l_u16Divider = 4;
+	uint16_t l_u16MinDelta = 30;
+	uint16_t l_u16Divider = 52;
 
 	uint16_t l_u16Dif;
 	uint16_t l_u16Height;
