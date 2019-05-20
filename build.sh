@@ -41,9 +41,9 @@ then
 	PROJ_TARGOUT=$OUT_FILE
     done
     lsusb -d $TI_CARD_ID && test -f $PROJ_TARGOUT &&
-	$CCS_PATH/$CCS_LOAD_UTIL -c $PROJ_TARGCNF -l $PROJ_TARGOUT > $TEMP_FILE
+	$CCS_PATH/$CCS_LOAD_UTIL -c $PROJ_TARGCNF -l $PROJ_TARGOUT &> $TEMP_FILE
     lsusb -d $TI_CARD_ID && test -f $PROJ_TARGOUT &&
-	if (( grep -c 'no longer supported' $TEMP_FILE ))
+	if grep -c 'no longer supported' $TEMP_FILE 
 	then
 	    $CCS_PATH_LEGA/$CCS_LOAD_UTIL -c $PROJ_TARGCNF_LEGA -l $PROJ_TARGOUT > $TEMP_FILE
 	fi
