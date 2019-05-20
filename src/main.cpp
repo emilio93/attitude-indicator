@@ -22,7 +22,7 @@ scheduler::Scheduler g_MainScheduler;         // - Instantiate a Scheduler
 mkii::Led* g_pRedLed =
     new mkii::Led(peripheral::gpio::Port::PORT1, peripheral::gpio::Pin::PIN0);
 
-Graphics_Context g_sContext;
+Graphics_Context* g_pContext;
 
 void T32_INT1_IRQHandler(void);
 
@@ -37,7 +37,7 @@ void main(void) {
 	peripheral::LcdScreen* l_pLcdScreen =
 	    new peripheral::LcdScreen(new peripheral::lcdScreen::Spi());
 	task::RefreshScreenBackground* l_pRefreshScreenBackground =
-	    new task::RefreshScreenBackground(l_pLcdScreen, g_sContext);
+	    new task::RefreshScreenBackground(l_pLcdScreen, g_pContext);
 
 	Setup();
 
