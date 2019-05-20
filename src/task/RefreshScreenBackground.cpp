@@ -2,24 +2,28 @@
 
 #include "task/RefreshScreenBackground.hpp"
 
+Graphics_Context* task::RefreshScreenBackground::m_pContext;
+
 task::RefreshScreenBackground::RefreshScreenBackground(
-    peripheral::LcdScreen* i_pLcdScreen, Graphics_Context i_stContext) {
+    peripheral::LcdScreen* i_pLcdScreen, Graphics_Context* i_pContext) {
 	this->setLcdScreen(i_pLcdScreen);
-	this->setContext(i_stContext);
+	this->setContext(i_pContext);
 }
 
 uint8_t task::RefreshScreenBackground::setup(void) {
 	this->getLcdScreen()->Init();
 	this->getLcdScreen()->SetOrientation(peripheral::lcdScreen::ORIENTATION_UP);
-	Graphics_initContext(&this->getContext(),
-	                     &peripheral::LcdScreen::GetCrystalfontz128x128(),
-	                     &peripheral::LcdScreen::GetCrystalfontz128x128_funcs());
-	Graphics_setBackgroundColor(&this->getContext(), GRAPHICS_COLOR_WHITE);
-	GrContextFontSet(&this->getContext(), &g_sFontFixed6x8);
+	Graphics_Context* l_pGraphicsContext = this->getContext();
+	Graphics_initContext(l_pGraphicsContext,
+	                     peripheral::LcdScreen::GetCrystalfontz128x128(),
+	                     peripheral::LcdScreen::GetCrystalfontz128x128_funcs());
+	Graphics_setBackgroundColor(l_pGraphicsContext, GRAPHICS_COLOR_WHITE);
+	GrContextFontSet(l_pGraphicsContext, &g_sFontFixed6x8);
 	this->m_u16X = 8192;
 	this->m_u16Y = 8192;
 	this->m_u16Z = 8192;
 	this->repaintScreen();
+	return NO_ERR;
 }
 
 uint8_t task::RefreshScreenBackground::run(void) {
@@ -27,6 +31,7 @@ uint8_t task::RefreshScreenBackground::run(void) {
 	this->m_u16Y = mkii::Accelerometer::GetY();
 	this->m_u16Z = mkii::Accelerometer::GetZ();
 	this->repaintScreen();
+	return NO_ERR;
 }
 
 void task::RefreshScreenBackground::repaintScreen() {
@@ -41,7 +46,6 @@ void task::RefreshScreenBackground::repaintScreen() {
 
 	uint16_t l_u16Dif;
 	uint16_t l_u16Height;
-
 
 	Graphics_Rectangle l_stRectBlue;
 	Graphics_Rectangle l_stRectBrown;
@@ -65,15 +69,16 @@ void task::RefreshScreenBackground::repaintScreen() {
 			l_u16Height = 127;
 		}
 
-		l_stRectBlue = {0, 0, 127, l_u16Height};
-		l_stRectBrown = {0, 127, 127, l_u16Height};
-		Graphics_setForegroundColor(&this->getContext(), GRAPHICS_COLOR_LIGHT_BLUE);
-		Graphics_fillRectangle(&this->getContext(), &l_stRectBlue);
-		Graphics_setForegroundColor(&this->getContext(), GRAPHICS_COLOR_PERU);
-		Graphics_fillRectangle(&this->getContext(), &l_stRectBrown);
+		Graphics_Context* l_pGraphicsContext = this->getContext();
+		l_stRectBlue = {0, 0, 127, (uint8_t)l_u16Height};
+		l_stRectBrown = {0, 127, 127, (uint8_t)l_u16Height};
+		Graphics_setForegroundColor(l_pGraphicsContext, GRAPHICS_COLOR_LIGHT_BLUE);
+		Graphics_fillRectangle(l_pGraphicsContext, &l_stRectBlue);
+		Graphics_setForegroundColor(l_pGraphicsContext, GRAPHICS_COLOR_PERU);
+		Graphics_fillRectangle(l_pGraphicsContext, &l_stRectBrown);
 
-		Graphics_setForegroundColor(&this->getContext(), GRAPHICS_COLOR_WHITE);
-		Graphics_drawLine(&this->getContext(), 0, l_u16Height, 127, l_u16Height);
+		Graphics_setForegroundColor(l_pGraphicsContext, GRAPHICS_COLOR_WHITE);
+		Graphics_drawLine(l_pGraphicsContext, 0, l_u16Height, 127, l_u16Height);
 
 		int i, maxi;
 		uint8_t j, k;
@@ -93,9 +98,8 @@ void task::RefreshScreenBackground::repaintScreen() {
 			k = l_isToggle ? l_u8XCenter + l_u8LongLineHalfLenght
 			               : l_u8XCenter + l_u8ShortLineHalfLenght;
 
-			Graphics_drawLine(&this->getContext(), j,
-			                  l_u8YStart + l_u8YSeparation * i, k,
-			                  l_u8YStart + l_u8YSeparation * i);
+			Graphics_drawLine(l_pGraphicsContext, j, l_u8YStart + l_u8YSeparation * i,
+			                  k, l_u8YStart + l_u8YSeparation * i);
 			l_isToggle = !l_isToggle;
 		}
 
@@ -108,9 +112,8 @@ void task::RefreshScreenBackground::repaintScreen() {
 			k = l_isToggle ? l_u8XCenter + l_u8LongLineHalfLenght
 			               : l_u8XCenter + l_u8ShortLineHalfLenght;
 
-			Graphics_drawLine(&this->getContext(), j,
-			                  l_u8YStart + l_u8YSeparation * i, k,
-			                  l_u8YStart + l_u8YSeparation * i);
+			Graphics_drawLine(l_pGraphicsContext, j, l_u8YStart + l_u8YSeparation * i,
+			                  k, l_u8YStart + l_u8YSeparation * i);
 			l_isToggle = !l_isToggle;
 		}
 	}
@@ -125,10 +128,10 @@ peripheral::LcdScreen* task::RefreshScreenBackground::getLcdScreen(void) {
 	return this->m_pLcdScreen;
 }
 
-void task::RefreshScreenBackground::setContext(Graphics_Context i_stContext) {
-	this->m_stContext = i_stContext;
+void task::RefreshScreenBackground::setContext(Graphics_Context* i_pContext) {
+	this->m_pContext = i_pContext;
 }
 
-Graphics_Context task::RefreshScreenBackground::getContext(void) {
-	return this->m_stContext;
+Graphics_Context* task::RefreshScreenBackground::getContext(void) {
+	return task::RefreshScreenBackground::m_pContext;
 }

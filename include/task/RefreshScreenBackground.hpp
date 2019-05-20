@@ -15,7 +15,7 @@ namespace task {
 class RefreshScreenBackground : public scheduler::Task {
  public:
 	RefreshScreenBackground(peripheral::LcdScreen* i_pLcdScreen,
-	                        Graphics_Context i_stContext);
+	                        Graphics_Context* i_pContext);
 
 	/**
 	 * Refresh the area that has changed.
@@ -50,14 +50,14 @@ class RefreshScreenBackground : public scheduler::Task {
 	 *
 	 * @param i_stContext The Context data.
 	 */
-	void setContext(Graphics_Context i_stContext);
+	void setContext(Graphics_Context* i_stContext);
 
 	/**
 	 * Get the Context data.
 	 *
 	 * @return Graphics_Context The Context data.
 	 */
-	Graphics_Context getContext(void);
+	Graphics_Context* getContext(void);
 
 	void repaintScreen(void);
 
@@ -78,7 +78,7 @@ class RefreshScreenBackground : public scheduler::Task {
 	/**
 	 * The graphics context in which is being draw.
 	 */
-	Graphics_Context m_stContext;
+	static Graphics_Context* m_pContext;
 
 	/**
 	 * The LcdScreen Object.
