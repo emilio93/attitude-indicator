@@ -16,9 +16,20 @@ uint8_t task::RefreshScreenBackground::setup(void) {
 	                     &peripheral::LcdScreen::GetCrystalfontz128x128_funcs());
 	Graphics_setBackgroundColor(&this->getContext(), GRAPHICS_COLOR_WHITE);
 	GrContextFontSet(&this->getContext(), &g_sFontFixed6x8);
+	this->m_u16X = 8192;
+	this->m_u16Y = 8192;
+	this->m_u16Z = 8192;
+	this->repaintScreen();
 }
 
 uint8_t task::RefreshScreenBackground::run(void) {
+	this->m_u16X = mkii::Accelerometer::GetX();
+	this->m_u16Y = mkii::Accelerometer::GetY();
+	this->m_u16Z = mkii::Accelerometer::GetZ();
+	this->repaintScreen();
+}
+
+void task::RefreshScreenBackground::repaintScreen() {
 	uint16_t l_u16Threshold = 8192;
 
 	uint16_t l_u16LimitThreshold = 3258;
@@ -31,9 +42,6 @@ uint8_t task::RefreshScreenBackground::run(void) {
 	uint16_t l_u16Dif;
 	uint16_t l_u16Height;
 
-	this->m_u16X = mkii::Accelerometer::GetX();
-	this->m_u16Y = mkii::Accelerometer::GetY();
-	this->m_u16Z = mkii::Accelerometer::GetZ();
 
 	Graphics_Rectangle l_stRectBlue;
 	Graphics_Rectangle l_stRectBrown;

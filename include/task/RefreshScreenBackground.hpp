@@ -59,6 +59,8 @@ class RefreshScreenBackground : public scheduler::Task {
 	 */
 	Graphics_Context getContext(void);
 
+	void repaintScreen(void);
+
  protected:
  private:
 	/**
