@@ -81,11 +81,14 @@ class AttitudeIndicator {
 	 */
 	uint16_t getRepaintArea(void);
 
+	/**
+	 * @brief Sets the latest state from the adc data.
+	 */
+	void updateLatestState(uint16_t);
 
 	/**
-	 * @brief Sets the current state as the previous state and the latest state as
-	 * the current state.
-	 *
+	 * @brief Sets the latest state as the current state and update the latest
+	 * state.
 	 */
 	void updateState(void);
 
@@ -95,6 +98,8 @@ class AttitudeIndicator {
 	 *
 	 */
 	mkii::Accelerometer* m_pAccelerometer;
+
+	void setAccelerometer(mkii::Accelerometer* i_pAccelerometer);
 
 	/**
 	 * @brief The latest state is the newer state for the acquired accelerometer
