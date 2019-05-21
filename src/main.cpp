@@ -38,9 +38,13 @@ void main(void) {
 	    new peripheral::LcdScreen(new peripheral::lcdScreen::Spi());
 	task::RefreshScreenBackground* l_pRefreshScreenBackground =
 	    new task::RefreshScreenBackground(l_pLcdScreen, g_pContext);
+	task::LED* RedLED = new task::LED(g_pRedLed);
+
+	g_pRedLed->SetState(true);
 
 	g_MainScheduler.attach(l_pAccelerometerTask, 10);
-	g_MainScheduler.attach(l_pRefreshScreenBackground, 30);
+	g_MainScheduler.attach(l_pRefreshScreenBackground, 10);
+	g_MainScheduler.attach(RedLED, 500);
 
 	g_MainScheduler.setup();
 
@@ -75,9 +79,6 @@ void Setup(void) {
 	CS_initClockSignal(CS_SMCLK, CS_DCOCLK_SELECT, CS_CLOCK_DIVIDER_1);
 	CS_initClockSignal(CS_ACLK, CS_REFOCLK_SELECT, CS_CLOCK_DIVIDER_1);
 
-	/* Enable Interrupts */
-	MAP_Interrupt_enableMaster();
-
 	g_pRedLed->SetState(false);
 
 	// ****************************
@@ -88,6 +89,9 @@ void Setup(void) {
 	    mkii::Timer::GetTimer(mkii::timer::TimerTypes::TIMER_32_0);
 	l_pTimer->SetCounter(TIMER32_COUNT);
 	l_pTimer->SetInterrupt(T32_INT1_IRQHandler);
+
+	/* Enable Interrupts */
+	MAP_Interrupt_enableMaster();
 
 	return;
 }

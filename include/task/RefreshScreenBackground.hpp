@@ -5,8 +5,8 @@
 
 #include <ti/grlib/grlib.h>
 
-#include "peripheral/LcdScreen.hpp"
 #include "mkii/Accelerometer.hpp"
+#include "peripheral/LcdScreen.hpp"
 
 #include "scheduler/Task.hpp"
 

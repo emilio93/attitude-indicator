@@ -13,7 +13,10 @@ task::RefreshScreenBackground::RefreshScreenBackground(
 uint8_t task::RefreshScreenBackground::setup(void) {
 	this->getLcdScreen()->Init();
 	this->getLcdScreen()->SetOrientation(peripheral::lcdScreen::ORIENTATION_UP);
-	Graphics_Context* l_pGraphicsContext = this->getContext();
+	// Initialize a object
+	Graphics_Context* l_pGraphicsContext = new Graphics_Context;
+	// Set the context
+	this->setContext(l_pGraphicsContext);
 	Graphics_initContext(l_pGraphicsContext,
 	                     peripheral::LcdScreen::GetCrystalfontz128x128(),
 	                     peripheral::LcdScreen::GetCrystalfontz128x128_funcs());
