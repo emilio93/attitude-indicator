@@ -11,6 +11,7 @@
 #include "task/Accelerometer.hpp"
 #include "task/LED.hpp"
 #include "task/RefreshScreenBackground.hpp"
+#include "task/RefreshScreenRollIndicator.hpp"
 
 
 #include <stdint.h>
@@ -57,12 +58,15 @@ void main(void) {
 	    new peripheral::LcdScreen(new peripheral::lcdScreen::Spi());
 	task::RefreshScreenBackground* l_pRefreshScreenBackground =
 	    new task::RefreshScreenBackground(l_pLcdScreen, g_pContext);
+	task::RefreshScreenRollIndicator* l_pRefreshScreenRollIndicator =
+	    new task::RefreshScreenRollIndicator(l_pLcdScreen, g_pContext);
 	task::LED* RedLED = new task::LED(g_pRedLed);
 
 	g_pRedLed->SetState(true);
 
 	g_MainScheduler.attach(l_pAccelerometerTask, 10);
-	g_MainScheduler.attach(l_pRefreshScreenBackground, 10);
+	// g_MainScheduler.attach(l_pRefreshScreenBackground, 10);
+	g_MainScheduler.attach(l_pRefreshScreenRollIndicator, 10);
 	g_MainScheduler.attach(RedLED, 500);
 
 	g_MainScheduler.setup();

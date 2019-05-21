@@ -8,3 +8,7 @@ targetConfigs/readme.txt
 docs
 
 .vscode/
+
+#emacs
+*~
+#*
