@@ -10,27 +10,14 @@ namespace attitude {
 namespace attitudeIndicator {
 
 /**
- * The quantity of previous states to track.
- */
-const uint8_t PREV_STATE_COUNT = 5;
-
-/**
  * The state is defined by B and M, the equation for the attitude indicator line
  * is:
  * y(x) = Mx+B
- *
- * x in [0, 127]
- *
- * Example, Y is 60 and M is 0
- * y(x) = 60
- * Example, Y is 50 and M is -6
- * y(x) = -6x + 50
- * y(x=0) =
- *
- * However, this needs to be discretized.
  */
 struct State {
-	uint8_t m_u8B, uint8_t m_u8M, bool m_bLeftToRightRise
+	uint8_t m_u8B;
+	uint8_t m_u8M;
+	bool m_bLeftToRightRise;
 };
 
 }  // namespace attitudeIndicator
@@ -63,40 +50,9 @@ struct State {
  *
  * y(x) = M * (x - Xmax/2) + Y
  *
- *  _________________
- * |                 |
- * |                 |
- * |________.________|
- * |                 |
- * |_|_|..|_|_|..|_|_|
- * |_|_|..|_|_|..|_|_|
- * 0      63 64     127
+ * Noting the Y axis is inverted in the screen.
  *
- *  _________________
- * |________.________|
- * |                 |
- * |                 |
- * |                 |
- * |_|_|..|_|_|..|_|_|
- * |_|_|..|_|_|..|_|_|
- * 0      63 64     127
- *
- *  _________________
- * |           /     |
- * |          /      |
- * |        ./       |
- * |       /         |
- * |_|_|..|_|_|..|_|_|
- * |_|_|..|_|_|..|_|_|
- * 0      63 64     127
- *
- *
- * How to track changes
- * Having current state and previous state makes it easy.
- *
- *
- *
- *
+ * y(x) = M * (Xmax/2 - x) - Y
  */
 class AttitudeIndicator {
  public:
@@ -107,14 +63,31 @@ class AttitudeIndicator {
 	 *
 	 * @return uint8_t
 	 */
-	uint8_t getY(void);
+	uint8_t getM(void);
 
 	/**
-	 * Set the Y position of the horizon line
+	 * Obtain the Y position of the horizon line.
 	 *
 	 * @return uint8_t
 	 */
-	uint8_t setY(void);
+	uint8_t getY(void);
+
+	/**
+	 * @brief Compares the latest state to the current state and returns the area
+	 * in pixels that are different.
+	 *
+	 * @return uint16_t The quantity of pixels that are different between the
+	 * latest and current state.
+	 */
+	uint16_t getRepaintArea(void);
+
+
+	/**
+	 * @brief Sets the current state as the previous state and the latest state as
+	 * the current state.
+	 *
+	 */
+	void updateState(void);
 
  private:
 	/**
@@ -124,10 +97,16 @@ class AttitudeIndicator {
 	mkii::Accelerometer* m_pAccelerometer;
 
 	/**
-	 * The Y position of the horizon line.
+	 * @brief The latest state is the newer state for the acquired accelerometer
+	 * data. The latest state is not necessarily painted to screen.
+	 */
+	attitude::attitudeIndicator::State m_stLatestState;
+
+	/**
+	 * @brief The state currently displayed on the screen.
 	 *
 	 */
-	uint8_t m_u8Y;
+	attitude::attitudeIndicator::State m_stCurrentState;
 };
 
 }  // namespace attitude
