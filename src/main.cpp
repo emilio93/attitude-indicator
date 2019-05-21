@@ -1,10 +1,6 @@
 #include "msp.h"
 
 #include <ti/grlib/grlib.h>
-extern "C" {
-#include <Crystalfontz128x128_ST7735.h>
-}
-
 #include "mkii/Accelerometer.hpp"
 #include "mkii/Led.hpp"
 #include "mkii/Timer.hpp"
@@ -14,6 +10,7 @@ extern "C" {
 #include "scheduler/Task.hpp"
 #include "task/Accelerometer.hpp"
 #include "task/LED.hpp"
+#include "task/RefreshScreenBackground.hpp"
 
 // ##########################
 // Global/Static declarations
@@ -25,7 +22,7 @@ scheduler::Scheduler g_MainScheduler;         // - Instantiate a Scheduler
 mkii::Led* g_pRedLed =
     new mkii::Led(peripheral::gpio::Port::PORT1, peripheral::gpio::Pin::PIN0);
 
-Graphics_Context g_sContext;
+Graphics_Context* g_pContext;
 
 void T32_INT1_IRQHandler(void);
 
@@ -37,11 +34,22 @@ void main(void) {
 	task::Accelerometer* l_pAccelerometerTask =
 	    new task::Accelerometer(l_pAccelerometer);
 
-	Setup();
+	peripheral::LcdScreen* l_pLcdScreen =
+	    new peripheral::LcdScreen(new peripheral::lcdScreen::Spi());
+	task::RefreshScreenBackground* l_pRefreshScreenBackground =
+	    new task::RefreshScreenBackground(l_pLcdScreen, g_pContext);
+	task::LED* RedLED = new task::LED(g_pRedLed);
+
+	g_pRedLed->SetState(true);
 
 	g_MainScheduler.attach(l_pAccelerometerTask, 10);
+	g_MainScheduler.attach(l_pRefreshScreenBackground, 10);
+	g_MainScheduler.attach(RedLED, 500);
 
 	g_MainScheduler.setup();
+
+	Setup();
+
 	// - Main Loop
 	while (1) {
 		__wfe();  // Wait for Event
@@ -71,9 +79,6 @@ void Setup(void) {
 	CS_initClockSignal(CS_SMCLK, CS_DCOCLK_SELECT, CS_CLOCK_DIVIDER_1);
 	CS_initClockSignal(CS_ACLK, CS_REFOCLK_SELECT, CS_CLOCK_DIVIDER_1);
 
-	/* Enable Interrupts */
-	MAP_Interrupt_enableMaster();
-
 	g_pRedLed->SetState(false);
 
 	// ****************************
@@ -84,6 +89,9 @@ void Setup(void) {
 	    mkii::Timer::GetTimer(mkii::timer::TimerTypes::TIMER_32_0);
 	l_pTimer->SetCounter(TIMER32_COUNT);
 	l_pTimer->SetInterrupt(T32_INT1_IRQHandler);
+
+	/* Enable Interrupts */
+	MAP_Interrupt_enableMaster();
 
 	return;
 }

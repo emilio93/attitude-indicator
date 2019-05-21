@@ -4,9 +4,6 @@
 #include <cstddef>
 
 #include <ti/grlib/grlib.h>
-extern "C" {
-#include <Crystalfontz128x128_ST7735.h>
-}
 
 #include "mkii/Accelerometer.hpp"
 
@@ -35,14 +32,6 @@ class Accelerometer : public scheduler::Task {
 	void setAccelerometer(mkii::Accelerometer* i_pAccelerometer);
 
 	mkii::Accelerometer* getAccelerometer(void);
-
-	void drawLine(int32_t x1, int32_t y1, int32_t x2, int32_t y2);
-
-	void drawBackground();
-
-	void updateBackground();
-
-	void printResults();
 };
 
 }  // namespace task
