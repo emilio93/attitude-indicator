@@ -22,10 +22,7 @@ uint8_t task::RefreshScreenBackground::setup(void) {
 	                     peripheral::LcdScreen::GetCrystalfontz128x128_funcs());
 	Graphics_setBackgroundColor(l_pGraphicsContext, GRAPHICS_COLOR_WHITE);
 	GrContextFontSet(l_pGraphicsContext, &g_sFontFixed6x8);
-	this->m_u16X = 8192;
-	this->m_u16Y = 8192;
-	this->m_u16Z = 8192;
-	this->repaintScreen();
+	this->run();
 	return NO_ERR;
 }
 
