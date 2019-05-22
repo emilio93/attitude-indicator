@@ -16,6 +16,20 @@ attitude::State::State(uint16_t i_u16AccelerometerZ,
 	this->setM(this->calculateM());
 }
 
+int32_t attitude::State::getPointAX() {
+	attitude::state::CaseX l_eCase = this->getAccelerometerXCase();
+	int32_t l_i32PointAX = (attitude::state::SCREEN_Y / 2) - 1;
+	if (l_eCase == attitude::state::CaseX::TOP_HORIZONTAL ||
+	    l_eCase == attitude::state::CaseX::BOTTOM_HOTIZONTAL) {
+		l_i32PointAX = l_i32PointAX - 2 * this->getPixelOffsetFromAccelerometerX();
+
+	} else if (l_eCase == attitude::state::CaseX::TOP_VERTICAL ||
+	           l_eCase == attitude::state::CaseX::BOTTOM_VERTICAL) {
+		l_i32PointAX = l_i32PointAX - 2 * (attitude::state::SCREEN_Y / 2);
+	}
+	return l_i32PointAX;
+}
+
 int32_t attitude::State::getPointBX() {
 	attitude::state::CaseX l_eCase = this->getAccelerometerXCase();
 	int32_t l_i32PointBX = attitude::state::SCREEN_X / 2;
