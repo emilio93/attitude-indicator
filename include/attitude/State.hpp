@@ -7,7 +7,13 @@ namespace attitude {
 
 namespace state {
 
-enum CaseX { TOP_HORIZONTA, TOP_VERTICAL, BOTTOM_VERTICAL, BOTTOM_HOTIZONTAL };
+enum CaseX {
+	TOP_HORIZONTA,
+	TOP_VERTICAL,
+	BOTTOM_VERTICAL,
+	BOTTOM_HOTIZONTAL,
+	ERROR
+};
 
 const uint16_t SCREEN_X = 128;
 const uint16_t SCREEN_Y = 128;

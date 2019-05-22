@@ -108,9 +108,13 @@ attitude::state::CaseX attitude::State::getAccelerometerXCase(void) {
 	           attitude::state::ADC_X_CASE4_LOWER_VALUE) {
 		// line crosses vertical bottom border
 		return attitude::state::CaseX::BOTTOM_VERTICAL;
-	} else {
+	} else if (this->getAccelerometerX() >=
+	           attitude::state::ADC_X_CASE8_LOWER_VALUE) {
 		// line crosses horizontal bottom border
 		return attitude::state::CaseX::BOTTOM_HOTIZONTAL;
+	} else {
+		// shouldn get here
+		return attitude::state::CaseX::ERROR;
 	}
 }
 
