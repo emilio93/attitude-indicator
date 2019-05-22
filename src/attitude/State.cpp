@@ -281,10 +281,17 @@ uint16_t attitude::State::getPixelOffsetFromAccelerometerX(void) {
 }
 
 void attitude::State::printInfo() {
+	std::cout << this->getAccelerometerZ() << "\t";
 	std::cout << this->getAccelerometerX() << "\t";
 	std::cout << this->getAccelerometerXCase() << "\t";
 	std::cout << this->getB() << "\t";
-	std::cout << this->getPixelOffsetFromAccelerometerX() << "\t\t";
+	std::cout << std::hex << (uint16_t)this->getM() << std::dec;
+	std::cout << "\t";
+	std::cout << std::hex << (uint16_t)((0xC0 & this->getM())>>6) << std::dec;
+	std::cout << "\t";
+	std::cout << (uint16_t)( 0x3f & this->getM()) << std::dec;
+	std::cout << "\t";
+	std::cout << this->getPixelOffsetFromAccelerometerX() << "\t";
 	std::cout << "(" << this->getPointAX() << ", " << this->getPointAY() << ")\t";
 	std::cout << "(" << this->getPointBX() << ", " << this->getPointBY() << ")\n";
 }
@@ -309,11 +316,12 @@ int main() {
 	uint16_t j = 0;
 	uint16_t l_u16Start = 4850;
 	uint16_t l_u16End = 11550;
-	uint16_t l_u16Step = 100;
+	uint16_t l_u16Step = 200;
 	uint16_t l_u16ZValue = 8192;
 	bool l_bPrint = true;
 
-	if (l_bPrint) std::cout << "X value\tX Case\tB value\tPixel offset\t\tPoint A\tPoint B\n";
+	if (l_bPrint)
+		std::cout << "Z value\tX value\tX Case\tB value\tState\tS0-S1\tN0-N5\tPxl off\tPoint A\t\tPoint B\n";
 	while (i <= l_u16End) {
 		attitude::State* l_pState = new attitude::State(l_u16ZValue, i);
 		if (l_bPrint) l_pState->printInfo();
