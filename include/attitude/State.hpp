@@ -181,6 +181,20 @@ class State {
 	int32_t getPointBY();
 
 	/**
+	 * @brief Get the value of M.
+	 *
+	 * @return uint8_t The value of M.
+	 */
+	uint8_t getM();
+
+	/**
+	 * @brief Get the value of B.
+	 *
+	 * @return uint16_t The value ofB.
+	 */
+	uint16_t getB();
+
+	/**
 	 * @brief Sends detailed info on the State via std::cout.
 	 *
 	 */
@@ -326,25 +340,11 @@ class State {
 	void setM(uint8_t i_u8M);
 
 	/**
-	 * @brief Get the value of M.
-	 *
-	 * @return uint8_t The value of M.
-	 */
-	uint8_t getM();
-
-	/**
 	 * @brief Set the value of B.
 	 *
 	 * @param i_u16B The value of B.
 	 */
 	void setB(uint16_t i_u16B);
-
-	/**
-	 * @brief Get the value of B.
-	 *
-	 * @return uint16_t The value ofB.
-	 */
-	uint16_t getB();
 
 	/**
 	 * @brief Get the Accelerometer Z data.
