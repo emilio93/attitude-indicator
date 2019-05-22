@@ -23,9 +23,9 @@ int32_t attitude::State::getPointBX() {
 		l_i32PointBX = this->getPixelOffsetFromAccelerometerX() +
 		               attitude::state::SCREEN_X / 2;
 	} else if (l_eCase == attitude::state::CaseX::TOP_VERTICAL) {
-		l_i32PointBX = attitude::state::SCREEN_X / 2;
+		l_i32PointBX = attitude::state::SCREEN_X-1;
 	} else if (l_eCase == attitude::state::CaseX::BOTTOM_VERTICAL) {
-		l_i32PointBX = attitude::state::SCREEN_X / 2;
+		l_i32PointBX = attitude::state::SCREEN_X-1;
 	} else if (l_eCase == attitude::state::CaseX::BOTTOM_HOTIZONTAL) {
 		l_i32PointBX = this->getPixelOffsetFromAccelerometerX() +
 		               attitude::state::SCREEN_X / 2;
