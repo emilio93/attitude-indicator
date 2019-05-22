@@ -30,6 +30,7 @@ mkii::Led* g_pRedLed =
     new mkii::Led(peripheral::gpio::Port::PORT1, peripheral::gpio::Pin::PIN0);
 
 Graphics_Context* g_pContext;
+Graphics_Context* g_pContextCircle;
 
 void T32_INT1_IRQHandler(void);
 
@@ -59,14 +60,15 @@ void main(void) {
 	task::RefreshScreenBackground* l_pRefreshScreenBackground =
 	    new task::RefreshScreenBackground(l_pLcdScreen, g_pContext);
 	task::RefreshScreenRollIndicator* l_pRefreshScreenRollIndicator =
-	    new task::RefreshScreenRollIndicator(l_pLcdScreen, g_pContext);
+	    new task::RefreshScreenRollIndicator(l_pLcdScreen, g_pContextCircle,
+	                                         g_pContext);
 	task::LED* RedLED = new task::LED(g_pRedLed);
 
 	g_pRedLed->SetState(true);
 
 	g_MainScheduler.attach(l_pAccelerometerTask, 10);
-	// g_MainScheduler.attach(l_pRefreshScreenBackground, 10);
-	g_MainScheduler.attach(l_pRefreshScreenRollIndicator, 10);
+	g_MainScheduler.attach(l_pRefreshScreenBackground, 20);
+	g_MainScheduler.attach(l_pRefreshScreenRollIndicator, 20);
 	g_MainScheduler.attach(RedLED, 500);
 
 	g_MainScheduler.setup();

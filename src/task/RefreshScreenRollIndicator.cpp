@@ -31,11 +31,6 @@ uint8_t task::RefreshScreenRollIndicator::setup(void) {
 	Graphics_setBackgroundColor(l_pGraphicsContextCircle, GRAPHICS_COLOR_WHITE);
 	Graphics_setBackgroundColor(l_pGraphicsContextArrow, GRAPHICS_COLOR_WHITE);
 
-	Graphics_Rectangle l_stRectClimbArea;
-	l_stRectClimbArea = {0, 0, 127, 36};
-	Graphics_setClipRegion(l_pGraphicsContextCircle, &l_stRectClimbArea);
-	l_stRectClimbArea = {0, 0, 127, 64};
-	Graphics_setClipRegion(l_pGraphicsContextArrow, &l_stRectClimbArea);
 	this->run();
 	return NO_ERR;
 }
@@ -44,14 +39,17 @@ uint8_t task::RefreshScreenRollIndicator::run(void) {
 	this->m_u16X = mkii::Accelerometer::GetX();
 
 	this->repaintRollIndicator();
-	// this->paintArrow_0(63,8);
-	// this->paintArrow_60(20,26);
-	// this->paintArrow_30(10,10);
+	this->paintArrow_0(63, 8);
+	this->paintArrow_60(20, 26);
+	this->paintArrow_30(10, 10);
 	return NO_ERR;
 }
 
 void task::RefreshScreenRollIndicator::repaintRollIndicator() {
 	Graphics_Context* l_pGraphicsContext = this->getContextCircle();
+	Graphics_Rectangle l_stRectClimbArea;
+	l_stRectClimbArea = {0, 0, 127, 36};
+	Graphics_setClipRegion(l_pGraphicsContext, &l_stRectClimbArea);
 
 	/*
 	 * Build roll indicator on screen
@@ -111,6 +109,9 @@ void task::RefreshScreenRollIndicator::paintArrow_0(uint16_t x, uint16_t y) {
 	// uint16_t l_u16XOffset = 0;
 	uint16_t l_u16YOffset = 2;
 	Graphics_Context* l_pGraphicsContext = this->getContextArrow();
+	Graphics_Rectangle l_stRectClimbArea;
+	l_stRectClimbArea = {0, 0, 127, 64};
+	Graphics_setClipRegion(l_pGraphicsContext, &l_stRectClimbArea);
 
 	// Draw 0° from vertical arrow
 	for (int i = 0; i < 6; i++) {
@@ -128,6 +129,9 @@ void task::RefreshScreenRollIndicator::paintArrow_60(uint16_t x, uint16_t y) {
 	uint16_t l_u16XOffset = 2;
 	uint16_t l_u16YOffset = 2;
 	Graphics_Context* l_pGraphicsContext = this->getContextArrow();
+	Graphics_Rectangle l_stRectClimbArea;
+	l_stRectClimbArea = {0, 0, 127, 64};
+	Graphics_setClipRegion(l_pGraphicsContext, &l_stRectClimbArea);
 
 	// Draw 0° from vertical arrow
 	for (int i = 0; i < 5; i++) {
