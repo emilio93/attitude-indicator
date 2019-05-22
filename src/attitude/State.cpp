@@ -11,29 +11,32 @@ attitude::State::State(uint16_t i_u16AccelerometerZ,
 	this->setAccelerometerX(i_u16AccelerometerX);
 
 	// Set the B value from Accelerometer Z data
-	uint16_t l_u16B;
-	if (this->getAccelerometerX() > attitude::state::ADC_Z_MID_VALUE) {
-		l_u16B = i_u16AccelerometerX - attitude::state::ADC_Z_MID_VALUE;
-		l_u16B = l_u16B / attitude::state::ADC_Z_SCREEN_FACTOR;
-		l_u16B = (attitude::state::SCREEN_Y / 2) - l_u16B;
-	} else {
-		l_u16B = attitude::state::ADC_Z_MID_VALUE - this->getAccelerometerX();
-		l_u16B = l_u16B / attitude::state::ADC_Z_SCREEN_FACTOR;
-		l_u16B = (attitude::state::SCREEN_Y / 2) + l_u16B;
-	}
-	this->setB(l_u16B);
+	this->setB(this->calculateB());
 
 	uint16_t l_u16M;
 	attitude::state::CaseX l_eCaseX = this->getAccelerometerXCase();
 	l_u16M = this->getPixelOffsetFromAccelerometerX();
-
-
 }
 
 void attitude::State::setM(uint16_t i_u16M) { this->m_u16M = i_u16M; }
 uint16_t attitude::State::getM(void) { return this->m_u16M; }
 void attitude::State::setB(uint16_t i_u16B) { this->m_u16B = i_u16B; }
 uint16_t attitude::State::getB(void) { return this->m_u16B; }
+
+uint16_t attitude::State::calculateB(void) {
+	uint16_t l_u16B;
+	if (this->getAccelerometerZ() > attitude::state::ADC_Z_MID_VALUE) {
+		l_u16B = this->getAccelerometerZ() - attitude::state::ADC_Z_MID_VALUE;
+		l_u16B = l_u16B / attitude::state::ADC_Z_SCREEN_FACTOR;
+		l_u16B = (attitude::state::SCREEN_Y / 2) - l_u16B;
+	} else {
+		l_u16B = attitude::state::ADC_Z_MID_VALUE - this->getAccelerometerZ();
+		l_u16B = l_u16B / attitude::state::ADC_Z_SCREEN_FACTOR;
+		l_u16B = (attitude::state::SCREEN_Y / 2) + l_u16B;
+		l_u16B = l_u16B - 1;
+	}
+	return l_u16B;
+}
 
 void attitude::State::setAccelerometerZ(uint16_t i_u16AccelerometerZ) {
 	this->m_u16AccelerometerZ = i_u16AccelerometerZ;

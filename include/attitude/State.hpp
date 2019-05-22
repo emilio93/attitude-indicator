@@ -126,6 +126,7 @@ class State {
 
 	void setM(uint16_t i_u16M);
 	void setB(uint16_t i_u16B);
+	uint16_t calculateB(void);
 
 	void setAccelerometerZ(uint16_t i_u16AccelerometerZ);
 	void setAccelerometerX(uint16_t i_u16AccelerometerX);
