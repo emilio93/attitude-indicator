@@ -37,14 +37,14 @@ uint8_t task::RefreshScreenBackground::run(void) {
 }
 
 void task::RefreshScreenBackground::repaintScreen() {
-	uint16_t l_u16Threshold = 8192;
+	uint16_t l_u16Threshold = attitude::state::ADC_Z_MID_VALUE;
 
-	uint16_t l_u16LimitThreshold = 3258;
+	uint16_t l_u16LimitThreshold = attitude::state::ADC_Z_MAX_VARIATION;
 	uint16_t l_u16TopLimit = l_u16Threshold + l_u16LimitThreshold;
 	uint16_t l_u16BottomLimit = l_u16Threshold - l_u16LimitThreshold;
 
 	uint16_t l_u16MinDelta = 30;
-	uint16_t l_u16Divider = 52;
+	uint16_t l_u16Divider = attitude::state::ADC_Z_SCREEN_FACTOR;
 
 	uint16_t l_u16Dif;
 	uint16_t l_u16Height;
@@ -54,10 +54,10 @@ void task::RefreshScreenBackground::repaintScreen() {
 
 	if (this->m_u16Z > l_u16Threshold) {
 		l_u16Dif = (this->m_u16Z - l_u16Threshold) / l_u16Divider;
-		l_u16Height = 64 - l_u16Dif;
+		l_u16Height = (attitude::state::SCREEN_Y / 2) - l_u16Dif;
 	} else {
 		l_u16Dif = (l_u16Threshold - this->m_u16Z) / l_u16Divider;
-		l_u16Height = 64 + l_u16Dif;
+		l_u16Height = (attitude::state::SCREEN_Y / 2) + l_u16Dif;
 	}
 
 	if ((this->m_u16Z > this->m_u16OldZValue &&
@@ -68,17 +68,17 @@ void task::RefreshScreenBackground::repaintScreen() {
 		if (this->m_u16Z > l_u16TopLimit) {
 			l_u16Height = 0;
 		} else if (this->m_u16Z < l_u16BottomLimit) {
-			l_u16Height = 127;
+			l_u16Height = attitude::state::SCREEN_Y;
 		}
 
 		Graphics_Context* l_pGraphicsContext = this->getContext();
-		// l_stRectBlue = {0, 0, 127, (uint8_t)l_u16Height};
-		// l_stRectBrown = {0, 127, 127, (uint8_t)l_u16Height};
-		// Graphics_setForegroundColor(l_pGraphicsContext,
-		// GRAPHICS_COLOR_LIGHT_BLUE); Graphics_fillRectangle(l_pGraphicsContext,
-		// &l_stRectBlue); Graphics_setForegroundColor(l_pGraphicsContext,
-		// GRAPHICS_COLOR_PERU); Graphics_fillRectangle(l_pGraphicsContext,
-		// &l_stRectBrown);
+		l_stRectBlue = {0, 0, attitude::state::SCREEN_X, (uint8_t)l_u16Height};
+		l_stRectBrown = {0, attitude::state::SCREEN_Y, attitude::state::SCREEN_X,
+		                 (uint8_t)l_u16Height};
+		Graphics_setForegroundColor(l_pGraphicsContext, GRAPHICS_COLOR_LIGHT_BLUE);
+		Graphics_fillRectangle(l_pGraphicsContext, &l_stRectBlue);
+		Graphics_setForegroundColor(l_pGraphicsContext, GRAPHICS_COLOR_PERU);
+		Graphics_fillRectangle(l_pGraphicsContext, &l_stRectBrown);
 
 		Graphics_setForegroundColor(l_pGraphicsContext, GRAPHICS_COLOR_WHITE);
 		this->setState(new attitude::State(this->m_u16Z, this->m_u16X));
