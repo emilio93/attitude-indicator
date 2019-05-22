@@ -170,117 +170,43 @@ uint16_t attitude::State::getPixelOffsetFromAccelerometerX(void) {
 	}
 }
 
+#ifdef TEST_ATTITUDE_STATE
 /**
  * To compile, execute from base dir
- * g++ -Iinclude src/attitude/State.cpp
+ * g++ -O0 -g -Iinclude -DTEST_ATTITUDE_STATE src/attitude/State.cpp
+ *
+ * Test with valgrind for leaks
+ * valgrind --leak-check=yes ./a.out
  *
  * To execute
  * ./a.out
+ *
+ *
+ * The code test the correct intialization of the attitude::State object
+ *
  */
 int main() {
-	// clang-format off
-	attitude::State* l_aStates[] = {
-		// horizontal top, case 1
-		new attitude::State(8192, 13000), // x value will be set to max(11500)
-		new attitude::State(8192, 11400),
-		new attitude::State(8192, 11300),
-		new attitude::State(8192, 11200),
-		new attitude::State(8192, 11100),
-		new attitude::State(8192, 11000),
-		new attitude::State(8192, 10900),
-		new attitude::State(8192, 10800),
-		new attitude::State(8192, 10700),
-		new attitude::State(8192, 10600),
-		new attitude::State(8192, 10500),
-		new attitude::State(8192, 10400),
-		new attitude::State(8192, 10300),
-		new attitude::State(8192, 10200),
-		new attitude::State(8192, 10100),
-		new attitude::State(8192, 10000),
-		new attitude::State(8192, 9847),
+	uint16_t i = 4800;
+	uint16_t j = 0;
+	uint16_t l_u16Start = 4850;
+	uint16_t l_u16End = 11550;
+	uint16_t l_u16Step = 5;
+	uint16_t l_u16ZValue = 8192;
+	bool l_bPrint = false;
 
-		// vertical top, case 2
-		new attitude::State(8192, 9846),
-		new attitude::State(8192, 9800),
-		new attitude::State(8192, 9700),
-		new attitude::State(8192, 9600),
-		new attitude::State(8192, 9500),
-		new attitude::State(8192, 9400),
-		new attitude::State(8192, 9300),
-		new attitude::State(8192, 9200),
-		new attitude::State(8192, 9100),
-		new attitude::State(8192, 9000),
-		new attitude::State(8192, 8900),
-		new attitude::State(8192, 8800),
-		new attitude::State(8192, 8700),
-		new attitude::State(8192, 8600),
-		new attitude::State(8192, 8500),
-		new attitude::State(8192, 8400),
-		new attitude::State(8192, 8300),
-		new attitude::State(8192, 8200),
-		new attitude::State(8192, 8193),
+	if (l_bPrint) std::cout << "X value\tX Case\tB value\tPixel offset\n";
+	while (i <= l_u16End) {
+		attitude::State* l_pState = new attitude::State(l_u16ZValue, i);
 
-		// vertical bottom, case 4
-		new attitude::State(8192, 8192),
-		new attitude::State(8192, 8100),
-		new attitude::State(8192, 8000),
-		new attitude::State(8192, 7900),
-		new attitude::State(8192, 7800),
-		new attitude::State(8192, 7700),
-		new attitude::State(8192, 7600),
-		new attitude::State(8192, 7500),
-		new attitude::State(8192, 7400),
-		new attitude::State(8192, 7300),
-		new attitude::State(8192, 7200),
-		new attitude::State(8192, 7100),
-		new attitude::State(8192, 7000),
-		new attitude::State(8192, 6900),
-		new attitude::State(8192, 6800),
-		new attitude::State(8192, 6700),
-		new attitude::State(8192, 6600),
-		new attitude::State(8192, 6539),
-
-		// horizontal bottom, case 8
-		new attitude::State(8192, 6538),
-		new attitude::State(8192, 6500),
-		new attitude::State(8192, 6400),
-		new attitude::State(8192, 6300),
-		new attitude::State(8192, 6200),
-		new attitude::State(8192, 6100),
-		new attitude::State(8192, 6000),
-		new attitude::State(8192, 5900),
-		new attitude::State(8192, 5800),
-		new attitude::State(8192, 5700),
-		new attitude::State(8192, 5600),
-		new attitude::State(8192, 5500),
-		new attitude::State(8192, 5400),
-		new attitude::State(8192, 5300),
-		new attitude::State(8192, 5200),
-		new attitude::State(8192, 5100),
-		new attitude::State(8192, 5000),
-		new attitude::State(8192, 4900),
-		new attitude::State(8192, 4884),
-		new attitude::State(8192, 2000), // x value will be set to min(4884)
-		NULL
-	};
-	//clang-format on
-
-	uint16_t i = 0;
-	while (l_aStates[i] != NULL) {
-		std::cout << "************\n";
-		std::cout << " " << i << "\n";
-		std::cout << "************\n";
-
-		std::cout << "l_aStates[i]->getAccelerometerXCase(): ";
-		std::cout << (uint16_t)l_aStates[i]->getAccelerometerXCase() << "\n";
-
-		std::cout << "l_aStates[i]->getAccelerometerX(): ";
-		std::cout << l_aStates[i]->getAccelerometerX() << "\n";
-
-		std::cout << "l_pPixelOffset: ";
-		std::cout << (uint16_t)l_aStates[i]->getPixelOffsetFromAccelerometerX() << "\n\n";
-		i++;
+		if (l_bPrint) std::cout << l_pState->getAccelerometerX() << "\t";
+		if (l_bPrint) std::cout << l_pState->getAccelerometerXCase() << "\t";
+		if (l_bPrint) std::cout << l_pState->getB() << "\t";
+		if (l_bPrint) std::cout << l_pState->getPixelOffsetFromAccelerometerX() << "\n";
+		i = i + l_u16Step;
+		j++;
+		delete l_pState;
 	}
 
 	return 0;
 }
+#endif
