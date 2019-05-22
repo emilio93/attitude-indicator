@@ -151,51 +151,51 @@ uint16_t attitude::State::getPixelOffsetFromAccelerometerX(void) {
 	// true indicates from 0 to end.
 	// false indicates from end to 0.
 	bool l_bAscendingDirection = false;
-	int16_t l_u16Sum = 0;
+	int16_t l_i16Sum = 0;
 	attitude::state::CaseX l_eCase = this->getAccelerometerXCase();
 
 	if (l_eCase == attitude::state::CaseX::TOP_HORIZONTAL) {
 		// line crosses horizontal top border
 		l_bAscendingDirection = false;
-		l_u16Sum =
+		l_i16Sum =
 		    this->getAccelerometerX() - attitude::state::ADC_X_CASE1_LOWER_VALUE;
 
 	} else if (l_eCase == attitude::state::CaseX::TOP_VERTICAL) {
 		// line crosses vertical top border
 		l_bAscendingDirection = true;
-		l_u16Sum =
+		l_i16Sum =
 		    this->getAccelerometerX() - attitude::state::ADC_X_CASE2_LOWER_VALUE;
 
 	} else if (l_eCase == attitude::state::CaseX::BOTTOM_VERTICAL) {
 		// line crosses vertical bottom border
 		l_bAscendingDirection = false;
-		l_u16Sum =
+		l_i16Sum =
 		    this->getAccelerometerX() - attitude::state::ADC_X_CASE4_LOWER_VALUE;
 
 	} else if (l_eCase == attitude::state::CaseX::BOTTOM_HOTIZONTAL) {
 		// line crosses horizontal bottom border
 		l_bAscendingDirection = true;
-		l_u16Sum =
+		l_i16Sum =
 		    this->getAccelerometerX() - attitude::state::ADC_X_CASE8_LOWER_VALUE;
 	}
 
 	// clip the value to avoid unexpected results
-	if (l_u16Sum > this->getScaledTanValuesSum()) {
-		l_u16Sum = this->getScaledTanValuesSum();
+	if (l_i16Sum > this->getScaledTanValuesSum()) {
+		l_i16Sum = this->getScaledTanValuesSum();
 	}
 
 	uint16_t l_u16i;
 	if (l_bAscendingDirection) {
 		for (l_u16i = 0; l_u16i < attitude::state::SCREEN_MAX / 2; l_u16i++) {
-			l_u16Sum = l_u16Sum - this->getScaledTanValue(l_u16i);
-			if (l_u16Sum <= 0) {
+			l_i16Sum = l_i16Sum - this->getScaledTanValue(l_u16i);
+			if (l_i16Sum <= 0) {
 				break;
 			}
 		}
 	} else {
 		for (l_u16i = attitude::state::SCREEN_MAX / 2; l_u16i > 0; l_u16i--) {
-			l_u16Sum = l_u16Sum - this->getScaledTanValue(l_u16i - 1);
-			if (l_u16Sum <= 0) {
+			l_i16Sum = l_i16Sum - this->getScaledTanValue(l_u16i - 1);
+			if (l_i16Sum <= 0) {
 				break;
 			}
 		}
