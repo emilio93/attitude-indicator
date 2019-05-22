@@ -81,19 +81,37 @@ uint16_t attitude::State::getScaledTanValuesSum(void) {
 }
 
 void attitude::State::scaleTanValues(void) {
+	uint16_t l_u16i = 0;
+	uint16_t u_16LimitI = 100;
 	uint16_t l_u16Sum = 0;
-	for (uint8_t i = 0; i < attitude::state::SCREEN_MAX / 2; i++) {
-		// Example TAN_ADD_VALUES[0] = 658
-		//         ADC_X_MAX_VARIATION = 3308
-		//         TAN_ADD_VALUES_SUM = 65536
-		//         l_u32ScaledValue = 658 * 3308/2 / 65536 = 16.606
-		uint32_t l_u32ScaledValue = attitude::state::TAN_ADD_VALUES[i] *
-		                            (attitude::state::ADC_X_MAX_VARIATION / 2) /
-		                            attitude::state::TAN_ADD_VALUES_SUM;
-		this->setScaledTanValue((uint16_t)l_u32ScaledValue, i);
-		l_u16Sum = l_u16Sum + (uint16_t)l_u32ScaledValue;
-	}
-	this->setScaledTanValuesSum(l_u16Sum);
+	uint16_t l_u16InitialVariation = attitude::state::ADC_X_MAX_VARIATION/2;
+	do {
+		l_u16Sum = 0;
+		for (uint16_t i = 0; i < attitude::state::SCREEN_MAX / 2; i++) {
+			// Example TAN_ADD_VALUES[0] = 658
+			//         ADC_X_MAX_VARIATION = 3308
+			//         TAN_ADD_VALUES_SUM = 65536
+			//         l_u32ScaledValue = 658 * 3308/2 / 65536 = 16.606
+			uint32_t l_u32ScaledValue = attitude::state::TAN_ADD_VALUES[i] *
+			                            (l_u16InitialVariation) /
+			                            attitude::state::TAN_ADD_VALUES_SUM;
+			this->setScaledTanValue((uint16_t)l_u32ScaledValue, i);
+			l_u16Sum = l_u16Sum + (uint16_t)l_u32ScaledValue;
+		}
+		this->setScaledTanValuesSum(l_u16Sum);
+		std::cout << this->getScaledTanValuesSum() << " Hello\n";
+
+		if (this->getScaledTanValuesSum() >
+		    (attitude::state::ADC_X_MAX_VARIATION / 2)) {
+			l_u16InitialVariation--;
+		} else if (this->getScaledTanValuesSum() <
+		           (attitude::state::ADC_X_MAX_VARIATION / 2)) {
+			l_u16InitialVariation = l_u16InitialVariation + 7;
+		}
+		l_u16i++;
+		if (l_u16i > u_16LimitI) return;
+	} while (this->getScaledTanValuesSum() !=
+	         attitude::state::ADC_X_MAX_VARIATION/2);
 }
 
 attitude::state::CaseX attitude::State::getAccelerometerXCase(void) {
