@@ -18,8 +18,8 @@ attitude::State::State(uint16_t i_u16AccelerometerZ,
 	l_u16M = this->getPixelOffsetFromAccelerometerX();
 }
 
-void attitude::State::setM(uint16_t i_u16M) { this->m_u16M = i_u16M; }
-uint16_t attitude::State::getM(void) { return this->m_u16M; }
+void attitude::State::setM(uint8_t i_u8M) { this->m_u8M = i_u8M; }
+uint8_t attitude::State::getM(void) { return this->m_u8M; }
 void attitude::State::setB(uint16_t i_u16B) { this->m_u16B = i_u16B; }
 uint16_t attitude::State::getB(void) { return this->m_u16B; }
 

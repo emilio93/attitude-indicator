@@ -155,7 +155,7 @@ class State {
 	 *
 	 *
 	 */
-	uint16_t m_u16M;
+	uint8_t m_u8M;
 
 	uint16_t m_u16B;
 
@@ -170,10 +170,10 @@ class State {
 
 	attitude::state::CaseX getAccelerometerXCase();
 
-	void setM(uint16_t i_u16M);
-	void setB(uint16_t i_u16B);
+	void setM(uint8_t i_u8M);
+	uint8_t getM();
 
-	uint16_t getM();
+	void setB(uint16_t i_u16B);
 	uint16_t getB();
 
 	uint16_t getAccelerometerZ();
