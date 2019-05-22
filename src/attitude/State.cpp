@@ -204,6 +204,13 @@ uint16_t attitude::State::getPixelOffsetFromAccelerometerX(void) {
 	return l_u16i;
 }
 
+void attitude::State::printInfo() {
+	std::cout << this->getAccelerometerX() << "\t";
+	std::cout << this->getAccelerometerXCase() << "\t";
+	std::cout << this->getB() << "\t";
+	std::cout << this->getPixelOffsetFromAccelerometerX() << "\n";
+}
+
 #ifdef TEST_ATTITUDE_STATE
 /**
  * To compile, execute from base dir
@@ -231,12 +238,7 @@ int main() {
 	if (l_bPrint) std::cout << "X value\tX Case\tB value\tPixel offset\n";
 	while (i <= l_u16End) {
 		attitude::State* l_pState = new attitude::State(l_u16ZValue, i);
-
-		if (l_bPrint) std::cout << l_pState->getAccelerometerX() << "\t";
-		if (l_bPrint) std::cout << l_pState->getAccelerometerXCase() << "\t";
-		if (l_bPrint) std::cout << l_pState->getB() << "\t";
-		if (l_bPrint)
-			std::cout << l_pState->getPixelOffsetFromAccelerometerX() << "\n";
+		if (l_bPrint) l_pState->printInfo();
 		i = i + l_u16Step;
 		j++;
 		delete l_pState;
