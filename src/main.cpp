@@ -58,7 +58,7 @@ void main(void) {
 	peripheral::LcdScreen* l_pLcdScreen =
 	    new peripheral::LcdScreen(new peripheral::lcdScreen::Spi());
 	task::RefreshScreenBackground* l_pRefreshScreenBackground =
-	    new task::RefreshScreenBackground(l_pLcdScreen, g_pContext);
+	    new task::RefreshScreenBackground(NULL, l_pLcdScreen, g_pContext);
 	task::RefreshScreenRollIndicator* l_pRefreshScreenRollIndicator =
 	    new task::RefreshScreenRollIndicator(l_pLcdScreen, g_pContextCircle,
 	                                         g_pContext);

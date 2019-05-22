@@ -5,7 +5,9 @@
 Graphics_Context* task::RefreshScreenBackground::m_pContext;
 
 task::RefreshScreenBackground::RefreshScreenBackground(
-    peripheral::LcdScreen* i_pLcdScreen, Graphics_Context* i_pContext) {
+    attitude::State* i_pState, peripheral::LcdScreen* i_pLcdScreen,
+    Graphics_Context* i_pContext) {
+	this->setState(i_pState);
 	this->setLcdScreen(i_pLcdScreen);
 	this->setContext(i_pContext);
 }
@@ -78,7 +80,11 @@ void task::RefreshScreenBackground::repaintScreen() {
 		Graphics_fillRectangle(l_pGraphicsContext, &l_stRectBrown);
 
 		Graphics_setForegroundColor(l_pGraphicsContext, GRAPHICS_COLOR_WHITE);
-		Graphics_drawLine(l_pGraphicsContext, 0, l_u16Height, 127, l_u16Height);
+		this->setState(new attitude::State(this->m_u16Z, this->m_u16X));
+		Graphics_drawLine(l_pGraphicsContext, this->getState()->getPointAX(),
+		                  this->getState()->getPointAY(),
+		                  this->getState()->getPointBX(),
+		                  this->getState()->getPointBY());
 
 		int i, maxi;
 		uint8_t j, k;
@@ -134,4 +140,15 @@ void task::RefreshScreenBackground::setContext(Graphics_Context* i_pContext) {
 
 Graphics_Context* task::RefreshScreenBackground::getContext(void) {
 	return task::RefreshScreenBackground::m_pContext;
+}
+
+attitude::State* task::RefreshScreenBackground::getState(void) {
+	return this->m_pState;
+}
+
+void task::RefreshScreenBackground::setState(attitude::State* i_pState) {
+	if (this->getState() != NULL) {
+		delete this->m_pState;
+	}
+	this->m_pState = i_pState;
 }
