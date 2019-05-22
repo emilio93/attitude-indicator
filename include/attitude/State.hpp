@@ -164,7 +164,7 @@ class State {
 
 	static bool m_bHasCalculatedScaledTanValues;
 	static uint16_t m_aScaledTanValues[attitude::state::SCREEN_MAX / 2];
-	uint16_t m_u16ScaledTanValuesSum;
+	static uint16_t m_u16ScaledTanValuesSum;
 
 	uint16_t calculateB(void);
 
