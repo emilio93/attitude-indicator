@@ -18,19 +18,16 @@ attitude::State::State(uint16_t i_u16AccelerometerZ,
 
 int32_t attitude::State::getPointBX() {
 	attitude::state::CaseX l_eCase = this->getAccelerometerXCase();
-	int32_t l_i32PointBX = 0;
-	if (l_eCase == attitude::state::CaseX::TOP_HORIZONTAL) {
-		l_i32PointBX = this->getPixelOffsetFromAccelerometerX() +
-		               attitude::state::SCREEN_X / 2;
-	} else if (l_eCase == attitude::state::CaseX::TOP_VERTICAL) {
-		l_i32PointBX = attitude::state::SCREEN_X-1;
-	} else if (l_eCase == attitude::state::CaseX::BOTTOM_VERTICAL) {
-		l_i32PointBX = attitude::state::SCREEN_X-1;
-	} else if (l_eCase == attitude::state::CaseX::BOTTOM_HOTIZONTAL) {
-		l_i32PointBX = this->getPixelOffsetFromAccelerometerX() +
-		               attitude::state::SCREEN_X / 2;
+	int32_t l_i32PointBX = attitude::state::SCREEN_X / 2;
+	if (l_eCase == attitude::state::CaseX::TOP_HORIZONTAL ||
+	    l_eCase == attitude::state::CaseX::BOTTOM_HOTIZONTAL) {
+		l_i32PointBX = l_i32PointBX + 2 * this->getPixelOffsetFromAccelerometerX();
+
+	} else if (l_eCase == attitude::state::CaseX::TOP_VERTICAL ||
+	           l_eCase == attitude::state::CaseX::BOTTOM_VERTICAL) {
+		l_i32PointBX = l_i32PointBX + 2 * (attitude::state::SCREEN_X / 2);
 	}
-	return 2 * l_i32PointBX;
+	return l_i32PointBX;
 }
 
 void attitude::State::setM(uint8_t i_u8M) { this->m_u8M = i_u8M; }
