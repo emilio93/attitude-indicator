@@ -9,16 +9,22 @@ attitude::State::State(uint16_t i_u16AccelerometerZ,
 
 	// Set the B value from Acceleroometer Z data
 	uint16_t l_u16B;
-	if (i_u16AccelerometerZ > attitude::state::ADC_Z_MID_VALUE) {
+	if (this->getAccelerometerX() > attitude::state::ADC_Z_MID_VALUE) {
 		l_u16B = i_u16AccelerometerX - attitude::state::ADC_Z_MID_VALUE;
 		l_u16B = l_u16B / attitude::state::ADC_Z_SCREEN_FACTOR;
 		l_u16B = (attitude::state::SCREEN_Y / 2) - l_u16B;
 	} else {
-		l_u16B = attitude::state::ADC_Z_MID_VALUE - i_u16AccelerometerX;
+		l_u16B = attitude::state::ADC_Z_MID_VALUE - this->getAccelerometerX();
 		l_u16B = l_u16B / attitude::state::ADC_Z_SCREEN_FACTOR;
 		l_u16B = (attitude::state::SCREEN_Y / 2) + l_u16B;
 	}
 	this->setB(l_u16B);
+
+	uint16_t l_u16M;
+	uint16_t l_u16CaseX = this->getAccelerometerXCase();
+	l_u16M = this->getPixelOffsetFromAccelerometerX();
+
+
 }
 
 void attitude::State::setM(uint16_t i_u16M) { this->m_u16M = i_u16M; }
@@ -140,13 +146,13 @@ uint16_t attitude::State::getPixelOffsetFromAccelerometerX(void) {
 		l_u16Sum =
 		    this->getAccelerometerX() - attitude::state::ADC_X_CASE8_LOWER_VALUE;
 	}
-	uint16_t i;
 
 	// clip the value to avoid unexpected results
 	if (l_u16Sum > this->getScaledTanValuesSum()) {
 		l_u16Sum = this->getScaledTanValuesSum();
 	}
 
+	uint16_t i;
 	if (l_bAscendingDirection) {
 		for (i = 0; i < attitude::state::SCREEN_MAX / 2; i++) {
 			l_u16Sum = l_u16Sum - this->getScaledTanValue(i);
@@ -157,7 +163,7 @@ uint16_t attitude::State::getPixelOffsetFromAccelerometerX(void) {
 	} else {
 		for (i = attitude::state::SCREEN_MAX / 2; i > 0; i--) {
 			l_u16Sum = l_u16Sum - this->getScaledTanValue(i - 1);
-			if (l_u16Sum < 0) {
+			if (l_u16Sum <= 0) {
 				return i;
 			}
 		}
