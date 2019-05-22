@@ -13,16 +13,29 @@ attitude::State::State(uint16_t i_u16AccelerometerZ,
 
 	// Set the B value from Accelerometer Z data
 	this->setB(this->calculateB());
-
-	uint16_t l_u16M;
-	attitude::state::CaseX l_eCaseX = this->getAccelerometerXCase();
-	l_u16M = this->getPixelOffsetFromAccelerometerX();
+	this->setM(this->calculateM());
 }
 
 void attitude::State::setM(uint8_t i_u8M) { this->m_u8M = i_u8M; }
 uint8_t attitude::State::getM(void) { return this->m_u8M; }
 void attitude::State::setB(uint16_t i_u16B) { this->m_u16B = i_u16B; }
 uint16_t attitude::State::getB(void) { return this->m_u16B; }
+
+uint8_t attitude::State::calculateM(void) {
+	attitude::state::CaseX l_eCase = this->getAccelerometerXCase();
+	uint8_t l_u16PixelOffset = (uint8_t)this->getPixelOffsetFromAccelerometerX();
+	uint8_t l_u8M = 0x00;
+	if (l_eCase == attitude::state::CaseX::TOP_HORIZONTAL) {
+		l_u8M = 0x00 | (0x3F & l_u16PixelOffset);
+	} else if (l_eCase == attitude::state::CaseX::TOP_VERTICAL) {
+		l_u8M = 0x40 | (0x3F & l_u16PixelOffset);
+	} else if (l_eCase == attitude::state::CaseX::BOTTOM_VERTICAL) {
+		l_u8M = 0x80 | (0x3F & l_u16PixelOffset);
+	} else if (l_eCase == attitude::state::CaseX::BOTTOM_HOTIZONTAL) {
+		l_u8M = 0xc0 | (0x3F & l_u16PixelOffset);
+	}
+	return l_u8M;
+}
 
 uint16_t attitude::State::calculateB(void) {
 	uint16_t l_u16B;

@@ -166,6 +166,8 @@ class State {
 	static uint16_t m_aScaledTanValues[attitude::state::SCREEN_MAX / 2];
 	static uint16_t m_u16ScaledTanValuesSum;
 
+	uint8_t calculateM(void);
+
 	uint16_t calculateB(void);
 
 	attitude::state::CaseX getAccelerometerXCase();
