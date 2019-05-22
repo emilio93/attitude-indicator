@@ -72,12 +72,13 @@ void task::RefreshScreenBackground::repaintScreen() {
 		}
 
 		Graphics_Context* l_pGraphicsContext = this->getContext();
-		l_stRectBlue = {0, 0, 127, (uint8_t)l_u16Height};
-		l_stRectBrown = {0, 127, 127, (uint8_t)l_u16Height};
-		Graphics_setForegroundColor(l_pGraphicsContext, GRAPHICS_COLOR_LIGHT_BLUE);
-		Graphics_fillRectangle(l_pGraphicsContext, &l_stRectBlue);
-		Graphics_setForegroundColor(l_pGraphicsContext, GRAPHICS_COLOR_PERU);
-		Graphics_fillRectangle(l_pGraphicsContext, &l_stRectBrown);
+		// l_stRectBlue = {0, 0, 127, (uint8_t)l_u16Height};
+		// l_stRectBrown = {0, 127, 127, (uint8_t)l_u16Height};
+		// Graphics_setForegroundColor(l_pGraphicsContext,
+		// GRAPHICS_COLOR_LIGHT_BLUE); Graphics_fillRectangle(l_pGraphicsContext,
+		// &l_stRectBlue); Graphics_setForegroundColor(l_pGraphicsContext,
+		// GRAPHICS_COLOR_PERU); Graphics_fillRectangle(l_pGraphicsContext,
+		// &l_stRectBrown);
 
 		Graphics_setForegroundColor(l_pGraphicsContext, GRAPHICS_COLOR_WHITE);
 		this->setState(new attitude::State(this->m_u16Z, this->m_u16X));
@@ -88,20 +89,29 @@ void task::RefreshScreenBackground::repaintScreen() {
 
 		uint16_t l_tempAX = this->getState()->getPointAX();
 		uint16_t l_tempBX = this->getState()->getPointBX();
-		if (l_tempAX > l_tempBX) {
-			int i = 64;
-			Graphics_setForegroundColor(l_pGraphicsContext,
-			                            GRAPHICS_COLOR_LIGHT_BLUE);
-			while (i > 0) {
-				l_tempAX--;
-				l_tempBX--;
-				i--;
+		uint16_t l_tempAY = this->getState()->getPointAY();
+		uint16_t l_tempBY = this->getState()->getPointBY();
 
-				Graphics_drawLine(l_pGraphicsContext, l_tempAX,
-				                  this->getState()->getPointAY(), l_tempBX,
-				                  this->getState()->getPointBY());
-			}
-		}
+		int ii = 10;
+		int jj = 0;
+		//		while ( ii ) {
+		ii--;
+
+		Graphics_setForegroundColor(l_pGraphicsContext, GRAPHICS_COLOR_LIGHT_BLUE);
+
+		Graphics_drawLine(l_pGraphicsContext, l_tempAX, l_tempAY, l_tempBX,
+		                  l_tempBY);
+
+		// Graphics_setForegroundColor(l_pGraphicsContext,
+		// 			      GRAPHICS_COLOR_PERU);
+
+		// Graphics_drawLine(l_pGraphicsContext, l_tempAX+ii,
+		// 		    l_tempAY,
+		// 		    l_tempBX+ii,
+		// 		    l_tempBY
+		// 		    );
+
+		//}
 
 		int i, maxi;
 		uint8_t j, k;
