@@ -1,4 +1,7 @@
 #include "attitude/State.hpp"
+uint16_t attitude::State::m_aScaledTanValues[attitude::state::SCREEN_MAX / 2] =
+    {0};
+bool attitude::State::m_bHasCalculatedScaledTanValues = false;
 
 attitude::State::State(uint16_t i_u16AccelerometerZ,
                        uint16_t i_u16AccelerometerX) {
@@ -65,11 +68,11 @@ uint16_t attitude::State::getAccelerometerX() {
 
 void attitude::State::setScaledTanValue(uint16_t i_u16ScaledTanValue,
                                         uint16_t i_u16Index) {
-	this->m_aScaledTanValues[i_u16Index] = i_u16ScaledTanValue;
+	attitude::State::m_aScaledTanValues[i_u16Index] = i_u16ScaledTanValue;
 }
 
 uint16_t attitude::State::getScaledTanValue(uint16_t i_u16Index) {
-	return this->m_aScaledTanValues[i_u16Index];
+	return attitude::State::m_aScaledTanValues[i_u16Index];
 }
 
 void attitude::State::setScaledTanValuesSum(uint16_t i_u16ScaledTanValuesSum) {
@@ -81,6 +84,10 @@ uint16_t attitude::State::getScaledTanValuesSum(void) {
 }
 
 void attitude::State::scaleTanValues(void) {
+	// run function only once.
+	if (attitude::State::m_bHasCalculatedScaledTanValues) return;
+	attitude::State::m_bHasCalculatedScaledTanValues = true;
+
 	uint16_t l_u16i = 0;
 	uint16_t u_16LimitI = 100;
 	uint16_t l_u16Sum = 0;

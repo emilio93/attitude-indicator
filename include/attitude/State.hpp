@@ -120,7 +120,8 @@ class State {
 	uint16_t m_u16AccelerometerZ;
 	uint16_t m_u16AccelerometerX;
 
-	uint16_t m_aScaledTanValues[attitude::state::SCREEN_MAX / 2];
+	static bool m_bHasCalculatedScaledTanValues;
+	static uint16_t m_aScaledTanValues[attitude::state::SCREEN_MAX / 2];
 	uint16_t m_u16ScaledTanValuesSum;
 
 	void setM(uint16_t i_u16M);
