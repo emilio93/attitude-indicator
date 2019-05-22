@@ -184,7 +184,7 @@ class State {
 	 * @brief Sends detailed info on the State via std::cout.
 	 *
 	 */
-	void printInfo();
+	void printInfo(bool i_bPrintHeader = false);
 
  private:
 	/**

@@ -280,7 +280,11 @@ uint16_t attitude::State::getPixelOffsetFromAccelerometerX(void) {
 	return l_u16i;
 }
 
-void attitude::State::printInfo() {
+void attitude::State::printInfo(bool i_bPrintHeader) {
+	if (i_bPrintHeader) {
+		std::cout << "Z value\tX value\tX Case\tB value\tState\tS0-S1\tN0-N5\tPxl "
+		             "off\tPoint A\t\tPoint B\n";
+	}
 	std::cout << this->getAccelerometerZ() << "\t";
 	std::cout << this->getAccelerometerX() << "\t";
 	std::cout << this->getAccelerometerXCase() << "\t";
