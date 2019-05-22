@@ -85,16 +85,16 @@ uint16_t attitude::State::getB(void) { return this->m_u16B; }
 
 uint8_t attitude::State::calculateM(void) {
 	attitude::state::CaseX l_eCase = this->getAccelerometerXCase();
-	uint8_t l_u16PixelOffset = (uint8_t)this->getPixelOffsetFromAccelerometerX();
+	uint8_t l_u8PixelOffset = (uint8_t)this->getPixelOffsetFromAccelerometerX();
 	uint8_t l_u8M = 0x00;
 	if (l_eCase == attitude::state::CaseX::TOP_HORIZONTAL) {
-		l_u8M = 0x00 | (0x3F & l_u16PixelOffset);
+		l_u8M = 0x00 | (0x3F & l_u8PixelOffset);
 	} else if (l_eCase == attitude::state::CaseX::TOP_VERTICAL) {
-		l_u8M = 0x40 | (0x3F & l_u16PixelOffset);
+		l_u8M = 0x40 | (0x3F & l_u8PixelOffset);
 	} else if (l_eCase == attitude::state::CaseX::BOTTOM_VERTICAL) {
-		l_u8M = 0x80 | (0x3F & l_u16PixelOffset);
+		l_u8M = 0x80 | (0x3F & l_u8PixelOffset);
 	} else if (l_eCase == attitude::state::CaseX::BOTTOM_HOTIZONTAL) {
-		l_u8M = 0xc0 | (0x3F & l_u16PixelOffset);
+		l_u8M = 0xc0 | (0x3F & l_u8PixelOffset);
 	}
 	return l_u8M;
 }
