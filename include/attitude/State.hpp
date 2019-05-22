@@ -8,7 +8,7 @@ namespace attitude {
 namespace state {
 
 enum CaseX {
-	TOP_HORIZONTA,
+	TOP_HORIZONTAL,
 	TOP_VERTICAL,
 	BOTTOM_VERTICAL,
 	BOTTOM_HOTIZONTAL,

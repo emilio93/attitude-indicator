@@ -7,7 +7,7 @@ attitude::State::State(uint16_t i_u16AccelerometerZ,
 	this->setAccelerometerZ(i_u16AccelerometerZ);
 	this->setAccelerometerX(i_u16AccelerometerX);
 
-	// Set the B value from Acceleroometer Z data
+	// Set the B value from Accelerometer Z data
 	uint16_t l_u16B;
 	if (this->getAccelerometerX() > attitude::state::ADC_Z_MID_VALUE) {
 		l_u16B = i_u16AccelerometerX - attitude::state::ADC_Z_MID_VALUE;
@@ -117,7 +117,7 @@ void attitude::State::scaleTanValues(void) {
 attitude::state::CaseX attitude::State::getAccelerometerXCase(void) {
 	if (this->getAccelerometerX() > (attitude::state::ADC_X_CASE1_LOWER_VALUE)) {
 		// line crosses horizontal top border
-		return attitude::state::CaseX::TOP_HORIZONTA;
+		return attitude::state::CaseX::TOP_HORIZONTAL;
 	} else if (this->getAccelerometerX() >
 	           attitude::state::ADC_X_CASE2_LOWER_VALUE) {
 		// line crosses vertical top border
@@ -144,7 +144,7 @@ uint16_t attitude::State::getPixelOffsetFromAccelerometerX(void) {
 	int16_t l_u16Sum = 0;
 	attitude::state::CaseX l_eCase = this->getAccelerometerXCase();
 
-	if (l_eCase == attitude::state::CaseX::TOP_HORIZONTA) {
+	if (l_eCase == attitude::state::CaseX::TOP_HORIZONTAL) {
 		// line crosses horizontal top border
 		l_bAscendingDirection = false;
 		l_u16Sum =
