@@ -284,7 +284,9 @@ void attitude::State::printInfo() {
 	std::cout << this->getAccelerometerX() << "\t";
 	std::cout << this->getAccelerometerXCase() << "\t";
 	std::cout << this->getB() << "\t";
-	std::cout << this->getPixelOffsetFromAccelerometerX() << "\n";
+	std::cout << this->getPixelOffsetFromAccelerometerX() << "\t\t";
+	std::cout << "(" << this->getPointAX() << ", " << this->getPointAY() << ")\t";
+	std::cout << "(" << this->getPointBX() << ", " << this->getPointBY() << ")\n";
 }
 
 #ifdef TEST_ATTITUDE_STATE
@@ -311,7 +313,7 @@ int main() {
 	uint16_t l_u16ZValue = 8192;
 	bool l_bPrint = true;
 
-	if (l_bPrint) std::cout << "X value\tX Case\tB value\tPixel offset\n";
+	if (l_bPrint) std::cout << "X value\tX Case\tB value\tPixel offset\t\tPoint A\tPoint B\n";
 	while (i <= l_u16End) {
 		attitude::State* l_pState = new attitude::State(l_u16ZValue, i);
 		if (l_bPrint) l_pState->printInfo();
