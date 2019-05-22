@@ -123,7 +123,7 @@ const uint16_t TAN_ADD_VALUES_SUM = 0xffff;
  * @brief Tangent steps for 64 steps adding up to TAN_ADD_VALUES_SUM.
  *
  */
-const uint16_t TAN_ADD_VALUES[] = {
+const uint16_t TAN_ADD_VALUES[SCREEN_MAX / 2] = {
     658,  658,  659,  659,  661,  662,  664,  667,  669,  672,  676,
     679,  683,  688,  692,  698,  703,  709,  716,  723,  730,  738,
     746,  755,  764,  774,  785,  796,  807,  820,  833,  847,  861,
