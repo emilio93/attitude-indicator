@@ -21,8 +21,10 @@ attitude::State::State(uint16_t i_u16AccelerometerZ,
 	this->setB(l_u16B);
 }
 
-void attitude::State::setM(uint8_t i_u8M) { this->m_u8M = i_u8M; }
-void attitude::State::setB(uint8_t i_u8B) { this->m_u8B = i_u8B; }
+void attitude::State::setM(uint16_t i_u16M) { this->m_u16M = i_u16M; }
+uint16_t attitude::State::getM(void) { return this->m_u16M; }
+void attitude::State::setB(uint16_t i_u16B) { this->m_u16B = i_u16B; }
+uint16_t attitude::State::getB(void) { return this->m_u16B; }
 
 void attitude::State::setAccelerometerZ(uint16_t i_u16AccelerometerZ) {
 	this->m_u16AccelerometerZ = i_u16AccelerometerZ;
@@ -56,12 +58,12 @@ uint16_t attitude::State::getAccelerometerX() {
 }
 
 void attitude::State::setScaledTanValue(uint16_t i_u16ScaledTanValue,
-                                        uint8_t i_u8Index) {
-	this->m_aScaledTanValues[i_u8Index] = i_u16ScaledTanValue;
+                                        uint16_t i_u16Index) {
+	this->m_aScaledTanValues[i_u16Index] = i_u16ScaledTanValue;
 }
 
-uint16_t attitude::State::getScaledTanValue(uint8_t i_u8Index) {
-	return this->m_aScaledTanValues[i_u8Index];
+uint16_t attitude::State::getScaledTanValue(uint16_t i_u16Index) {
+	return this->m_aScaledTanValues[i_u16Index];
 }
 
 void attitude::State::setScaledTanValuesSum(uint16_t i_u16ScaledTanValuesSum) {
@@ -88,7 +90,7 @@ void attitude::State::scaleTanValues(void) {
 	this->setScaledTanValuesSum(l_u16Sum);
 }
 
-uint8_t attitude::State::getAccelerometerXCase() {
+uint16_t attitude::State::getAccelerometerXCase(void) {
 	if (this->getAccelerometerX() > (attitude::state::ADC_X_CASE1_LOWER_VALUE)) {
 		return 1;
 	} else if (this->getAccelerometerX() >
@@ -102,7 +104,7 @@ uint8_t attitude::State::getAccelerometerXCase() {
 	}
 }
 
-uint8_t attitude::State::getPixelOffsetFromAccelerometerX(void) {
+uint16_t attitude::State::getPixelOffsetFromAccelerometerX(void) {
 	// the direction indicate the direction iteration over the steps.
 	// true indicates from 0 to end.
 	// false indicates from end to 0.

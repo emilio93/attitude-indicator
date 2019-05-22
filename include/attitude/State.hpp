@@ -89,15 +89,15 @@ class State {
  public:
 	State(uint16_t i_u16AccelerometerZ, uint16_t i_u16AccelerometerX);
 
-	uint8_t getM();
-	uint8_t getB();
+	uint16_t getM();
+	uint16_t getB();
 
 	uint16_t getAccelerometerZ();
 	uint16_t getAccelerometerX();
 
-	uint8_t getPixelOffsetFromAccelerometerX(void);
-	uint16_t getScaledTanValue(uint8_t i_u8Index);
-	uint8_t getAccelerometerXCase();
+	uint16_t getPixelOffsetFromAccelerometerX(void);
+	uint16_t getScaledTanValue(uint16_t i_u16Index);
+	uint16_t getAccelerometerXCase();
 
  private:
 	/**
@@ -106,8 +106,8 @@ class State {
 	 * The value on the center top is 0 and the value on the center bottom is
 	 * 255.
 	 */
-	uint8_t m_u8M;
-	uint8_t m_u8B;
+	uint16_t m_u16M;
+	uint16_t m_u16B;
 
 	uint16_t m_u16AccelerometerZ;
 	uint16_t m_u16AccelerometerX;
@@ -115,13 +115,13 @@ class State {
 	uint16_t m_aScaledTanValues[attitude::state::SCREEN_MAX / 2];
 	uint16_t m_u16ScaledTanValuesSum;
 
-	void setM(uint8_t i_u8M);
-	void setB(uint8_t i_u8B);
+	void setM(uint16_t i_u16M);
+	void setB(uint16_t i_u16B);
 
 	void setAccelerometerZ(uint16_t i_u16AccelerometerZ);
 	void setAccelerometerX(uint16_t i_u16AccelerometerX);
 
-	void setScaledTanValue(uint16_t i_u16ScaledTanValue, uint8_t i_u8Index);
+	void setScaledTanValue(uint16_t i_u16ScaledTanValue, uint16_t i_u16Index);
 
 	void setScaledTanValuesSum(uint16_t i_u16ScaledTanValuesSum);
 	uint16_t getScaledTanValuesSum(void);
