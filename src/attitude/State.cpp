@@ -183,24 +183,25 @@ uint16_t attitude::State::getPixelOffsetFromAccelerometerX(void) {
 		l_u16Sum = this->getScaledTanValuesSum();
 	}
 
-	uint16_t i;
+	uint16_t l_u16i;
 	if (l_bAscendingDirection) {
-		for (i = 0; i < attitude::state::SCREEN_MAX / 2; i++) {
-			l_u16Sum = l_u16Sum - this->getScaledTanValue(i);
+		for (l_u16i = 0; l_u16i < attitude::state::SCREEN_MAX / 2; l_u16i++) {
+			l_u16Sum = l_u16Sum - this->getScaledTanValue(l_u16i);
 			if (l_u16Sum <= 0) {
 				break;
 			}
 		}
 	} else {
-		for (i = attitude::state::SCREEN_MAX / 2; i > 0; i--) {
-			l_u16Sum = l_u16Sum - this->getScaledTanValue(i - 1);
+		for (l_u16i = attitude::state::SCREEN_MAX / 2; l_u16i > 0; l_u16i--) {
+			l_u16Sum = l_u16Sum - this->getScaledTanValue(l_u16i - 1);
 			if (l_u16Sum <= 0) {
 				break;
 			}
 		}
 	}
-	if (i > 63) i = 63;
-	return i;
+	if (l_u16i > 63) l_u16i = 63;
+
+	return l_u16i;
 }
 
 #ifdef TEST_ATTITUDE_STATE
