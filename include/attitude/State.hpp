@@ -7,6 +7,8 @@ namespace attitude {
 
 namespace state {
 
+enum CaseX { TOP_HORIZONTA, TOP_VERTICAL, BOTTOM_VERTICAL, BOTTOM_HOTIZONTAL };
+
 const uint16_t SCREEN_X = 128;
 const uint16_t SCREEN_Y = 128;
 
@@ -97,7 +99,7 @@ class State {
 
 	uint16_t getPixelOffsetFromAccelerometerX(void);
 	uint16_t getScaledTanValue(uint16_t i_u16Index);
-	uint16_t getAccelerometerXCase();
+	attitude::state::CaseX getAccelerometerXCase();
 
  private:
 	/**

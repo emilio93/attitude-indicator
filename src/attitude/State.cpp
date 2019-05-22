@@ -21,7 +21,7 @@ attitude::State::State(uint16_t i_u16AccelerometerZ,
 	this->setB(l_u16B);
 
 	uint16_t l_u16M;
-	uint16_t l_u16CaseX = this->getAccelerometerXCase();
+	attitude::state::CaseX l_eCaseX = this->getAccelerometerXCase();
 	l_u16M = this->getPixelOffsetFromAccelerometerX();
 
 
@@ -96,21 +96,21 @@ void attitude::State::scaleTanValues(void) {
 	this->setScaledTanValuesSum(l_u16Sum);
 }
 
-uint16_t attitude::State::getAccelerometerXCase(void) {
+attitude::state::CaseX attitude::State::getAccelerometerXCase(void) {
 	if (this->getAccelerometerX() > (attitude::state::ADC_X_CASE1_LOWER_VALUE)) {
 		// line crosses horizontal top border
-		return 1;
+		return attitude::state::CaseX::TOP_HORIZONTA;
 	} else if (this->getAccelerometerX() >
 	           attitude::state::ADC_X_CASE2_LOWER_VALUE) {
 		// line crosses vertical top border
-		return 2;
+		return attitude::state::CaseX::TOP_VERTICAL;
 	} else if (this->getAccelerometerX() >
 	           attitude::state::ADC_X_CASE4_LOWER_VALUE) {
 		// line crosses vertical bottom border
-		return 4;
+		return attitude::state::CaseX::BOTTOM_VERTICAL;
 	} else {
 		// line crosses horizontal bottom border
-		return 8;
+		return attitude::state::CaseX::BOTTOM_HOTIZONTAL;
 	}
 }
 
@@ -119,28 +119,28 @@ uint16_t attitude::State::getPixelOffsetFromAccelerometerX(void) {
 	// true indicates from 0 to end.
 	// false indicates from end to 0.
 	bool l_bAscendingDirection = false;
-	int16_t l_u16Sum;
-	uint8_t l_u8Case = this->getAccelerometerXCase();
+	int16_t l_u16Sum = 0;
+	attitude::state::CaseX l_eCase = this->getAccelerometerXCase();
 
-	if (l_u8Case == 1) {
+	if (l_eCase == attitude::state::CaseX::TOP_HORIZONTA) {
 		// line crosses horizontal top border
 		l_bAscendingDirection = false;
 		l_u16Sum =
 		    this->getAccelerometerX() - attitude::state::ADC_X_CASE1_LOWER_VALUE;
 
-	} else if (l_u8Case == 2) {
+	} else if (l_eCase == attitude::state::CaseX::TOP_VERTICAL) {
 		// line crosses vertical top border
 		l_bAscendingDirection = true;
 		l_u16Sum =
 		    this->getAccelerometerX() - attitude::state::ADC_X_CASE2_LOWER_VALUE;
 
-	} else if (l_u8Case == 4) {
+	} else if (l_eCase == attitude::state::CaseX::BOTTOM_VERTICAL) {
 		// line crosses vertical bottom border
 		l_bAscendingDirection = false;
 		l_u16Sum =
 		    this->getAccelerometerX() - attitude::state::ADC_X_CASE4_LOWER_VALUE;
 
-	} else {
+	} else if (l_eCase == attitude::state::CaseX::BOTTOM_HOTIZONTAL) {
 		// line crosses horizontal bottom border
 		l_bAscendingDirection = true;
 		l_u16Sum =
@@ -157,17 +157,19 @@ uint16_t attitude::State::getPixelOffsetFromAccelerometerX(void) {
 		for (i = 0; i < attitude::state::SCREEN_MAX / 2; i++) {
 			l_u16Sum = l_u16Sum - this->getScaledTanValue(i);
 			if (l_u16Sum <= 0) {
-				return i;
+				break;
 			}
 		}
 	} else {
 		for (i = attitude::state::SCREEN_MAX / 2; i > 0; i--) {
 			l_u16Sum = l_u16Sum - this->getScaledTanValue(i - 1);
 			if (l_u16Sum <= 0) {
-				return i;
+				break;
 			}
 		}
 	}
+	if (i > 63) i = 63;
+	return i;
 }
 
 #ifdef TEST_ATTITUDE_STATE
