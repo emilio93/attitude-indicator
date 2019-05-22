@@ -68,7 +68,7 @@ void main(void) {
 
 	g_MainScheduler.attach(l_pAccelerometerTask, 10);
 	g_MainScheduler.attach(l_pRefreshScreenBackground, 20);
-	g_MainScheduler.attach(l_pRefreshScreenRollIndicator, 20);
+	// g_MainScheduler.attach(l_pRefreshScreenRollIndicator, 20);
 	g_MainScheduler.attach(RedLED, 500);
 
 	g_MainScheduler.setup();

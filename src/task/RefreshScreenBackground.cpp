@@ -86,6 +86,23 @@ void task::RefreshScreenBackground::repaintScreen() {
 		                  this->getState()->getPointBX(),
 		                  this->getState()->getPointBY());
 
+		uint16_t l_tempAX = this->getState()->getPointAX();
+		uint16_t l_tempBX = this->getState()->getPointBX();
+		if (l_tempAX > l_tempBX) {
+			int i = 64;
+			Graphics_setForegroundColor(l_pGraphicsContext,
+			                            GRAPHICS_COLOR_LIGHT_BLUE);
+			while (i > 0) {
+				l_tempAX--;
+				l_tempBX--;
+				i--;
+
+				Graphics_drawLine(l_pGraphicsContext, l_tempAX,
+				                  this->getState()->getPointAY(), l_tempBX,
+				                  this->getState()->getPointBY());
+			}
+		}
+
 		int i, maxi;
 		uint8_t j, k;
 		uint8_t l_u8LongLineHalfLenght = 8;

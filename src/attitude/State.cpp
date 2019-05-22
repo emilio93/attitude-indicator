@@ -73,7 +73,7 @@ int32_t attitude::State::getPointBY() {
 		l_i32PointBY =
 		    l_i32PointBY + 2 * (this->getPixelOffsetFromAccelerometerX());
 	} else if (l_eCase == attitude::state::CaseX::BOTTOM_HOTIZONTAL) {
-		l_i32PointBY = l_i32PointBY - 2 * (attitude::state::SCREEN_Y / 2);
+		l_i32PointBY = l_i32PointBY + 2 * (attitude::state::SCREEN_Y / 2);
 	}
 	return l_i32PointBY;
 }
@@ -291,9 +291,9 @@ void attitude::State::printInfo(bool i_bPrintHeader) {
 	std::cout << this->getB() << "\t";
 	std::cout << std::hex << (uint16_t)this->getM() << std::dec;
 	std::cout << "\t";
-	std::cout << std::hex << (uint16_t)((0xC0 & this->getM())>>6) << std::dec;
+	std::cout << std::hex << (uint16_t)((0xC0 & this->getM()) >> 6) << std::dec;
 	std::cout << "\t";
-	std::cout << (uint16_t)( 0x3f & this->getM()) << std::dec;
+	std::cout << (uint16_t)(0x3f & this->getM()) << std::dec;
 	std::cout << "\t";
 	std::cout << this->getPixelOffsetFromAccelerometerX() << "\t";
 	std::cout << "(" << this->getPointAX() << ", " << this->getPointAY() << ")\t";
@@ -325,7 +325,8 @@ int main() {
 	bool l_bPrint = true;
 
 	if (l_bPrint)
-		std::cout << "Z value\tX value\tX Case\tB value\tState\tS0-S1\tN0-N5\tPxl off\tPoint A\t\tPoint B\n";
+		std::cout << "Z value\tX value\tX Case\tB value\tState\tS0-S1\tN0-N5\tPxl "
+		             "off\tPoint A\t\tPoint B\n";
 	while (i <= l_u16End) {
 		attitude::State* l_pState = new attitude::State(l_u16ZValue, i);
 		if (l_bPrint) l_pState->printInfo();
