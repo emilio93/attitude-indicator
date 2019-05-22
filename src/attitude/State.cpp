@@ -94,7 +94,7 @@ void attitude::State::scaleTanValues(void) {
 	uint16_t l_u16i = 0;
 	uint16_t u_16LimitI = 100;
 	uint16_t l_u16Sum = 0;
-	uint16_t l_u16InitialVariation = attitude::state::ADC_X_MAX_VARIATION/2;
+	uint16_t l_u16InitialVariation = attitude::state::ADC_X_MAX_VARIATION / 2;
 	do {
 		l_u16Sum = 0;
 		for (uint16_t i = 0; i < attitude::state::SCREEN_MAX / 2; i++) {
@@ -120,7 +120,7 @@ void attitude::State::scaleTanValues(void) {
 		l_u16i++;
 		if (l_u16i > u_16LimitI) return;
 	} while (this->getScaledTanValuesSum() !=
-	         attitude::state::ADC_X_MAX_VARIATION/2);
+	         attitude::state::ADC_X_MAX_VARIATION / 2);
 }
 
 attitude::state::CaseX attitude::State::getAccelerometerXCase(void) {
@@ -235,7 +235,8 @@ int main() {
 		if (l_bPrint) std::cout << l_pState->getAccelerometerX() << "\t";
 		if (l_bPrint) std::cout << l_pState->getAccelerometerXCase() << "\t";
 		if (l_bPrint) std::cout << l_pState->getB() << "\t";
-		if (l_bPrint) std::cout << l_pState->getPixelOffsetFromAccelerometerX() << "\n";
+		if (l_bPrint)
+			std::cout << l_pState->getPixelOffsetFromAccelerometerX() << "\n";
 		i = i + l_u16Step;
 		j++;
 		delete l_pState;
