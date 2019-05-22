@@ -109,7 +109,6 @@ void attitude::State::scaleTanValues(void) {
 			l_u16Sum = l_u16Sum + (uint16_t)l_u32ScaledValue;
 		}
 		this->setScaledTanValuesSum(l_u16Sum);
-		std::cout << this->getScaledTanValuesSum() << " Hello\n";
 
 		if (this->getScaledTanValuesSum() >
 		    (attitude::state::ADC_X_MAX_VARIATION / 2)) {
@@ -224,9 +223,9 @@ int main() {
 	uint16_t j = 0;
 	uint16_t l_u16Start = 4850;
 	uint16_t l_u16End = 11550;
-	uint16_t l_u16Step = 5;
+	uint16_t l_u16Step = 100;
 	uint16_t l_u16ZValue = 8192;
-	bool l_bPrint = false;
+	bool l_bPrint = true;
 
 	if (l_bPrint) std::cout << "X value\tX Case\tB value\tPixel offset\n";
 	while (i <= l_u16End) {
