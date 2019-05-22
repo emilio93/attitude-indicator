@@ -2,15 +2,23 @@
 
 # Format all hpp and cpp files within the project with clang-format
 
-hppFiles=$(find . -type f -name "*.hpp")
-cppFiles=$(find . -type f -name "*.cpp")
+HPPFILES=$(find . -type f -name "*.hpp")
+CPPFILES=$(find . -type f -name "*.cpp")
 
-for file in $hppFiles; do
-  echo "clang-format -i ${file}"
-  clang-format -i $file
+for FILE in $HPPFILES; do
+    STATUS="$( git status --short $FILE | tr -d ' ' )"
+    if [ $STATUS ]
+    then
+	echo "clang-format -i ${FILE}"
+	clang-format -i $FILE
+    fi
 done
 
-for file in $cppFiles; do
-  echo "clang-format -i ${file}"
-  clang-format -i $file
+for FILE in $CPPFILES; do
+    STATUS="$( git status --short $FILE | tr -d ' ' )"
+    if [ $STATUS ]
+    then
+	echo "clang-format -i ${FILE}"
+	clang-format -i $FILE
+    fi
 done
