@@ -126,6 +126,12 @@ class State {
 	 * s0 indicates if it is the upper(0) or lower(1) line.
 	 * s1 indicates if it is an horizontal(0) or verical(1) line.
 	 *
+	 * s0s1 crossing
+	 * 00   top horizontal
+	 * 01   top vertical
+	 * 10   bottom vertical
+	 * 11   bottom horizontal
+	 *
 	 * n0-n5 is P
 	 *
 	 * P is the offset of each case of crossing
