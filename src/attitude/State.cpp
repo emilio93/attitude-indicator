@@ -326,15 +326,13 @@ int main() {
 	bool l_bPrint = true;
 
 	if (l_bPrint)
-		std::cout << "Z value\tX value\tX Case\tB value\tState\tS0-S1\tN0-N5\tPxl "
-		             "off\tPoint A\t\tPoint B\n";
-	while (i <= l_u16End) {
-		attitude::State* l_pState = new attitude::State(l_u16ZValue, i);
-		if (l_bPrint) l_pState->printInfo();
-		i = i + l_u16Step;
-		j++;
-		delete l_pState;
-	}
+		while (i <= l_u16End) {
+			attitude::State* l_pState = new attitude::State(l_u16ZValue, i);
+			if (l_bPrint) l_pState->printInfo(j == 0);
+			i = i + l_u16Step;
+			j++;
+			delete l_pState;
+		}
 
 	return 0;
 }
