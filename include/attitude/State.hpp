@@ -200,6 +200,69 @@ class State {
 	 */
 	void printInfo(bool i_bPrintHeader = false);
 
+
+
+	/**
+	 * @brief Set the Accelerometer Z data.
+	 *
+	 * @param i_u16AccelerometerZ The Accelerometer Z data.
+	 */
+	void setAccelerometerZ(uint16_t i_u16AccelerometerZ);
+
+	/**
+	 * @brief Set the Accelerometer X data.
+	 *
+	 * @param i_u16AccelerometerX The Accelerometer X data.
+	 */
+	void setAccelerometerX(uint16_t i_u16AccelerometerX);
+
+	/**
+	 * @brief Obtain the value of M.
+	 *
+	 * The value of M is calculated depending on the case of the state.
+	 *
+	 * @return uint8_t M.
+	 */
+	uint8_t calculateM(void);
+
+	/**
+	 * @brief Obtain the value of B.
+	 *
+	 * @return uint16_t B.
+	 */
+	uint16_t calculateB(void);
+
+
+	/**
+	 * @brief Set the value of M.
+	 *
+	 * @param i_u8M The value of M.
+	 */
+	void setM(uint8_t i_u8M);
+
+	/**
+	 * @brief Set the value of B.
+	 *
+	 * @param i_u16B The value of B.
+	 */
+	void setB(uint16_t i_u16B);
+
+
+	/**
+	 * @brief Get the Accelerometer Z data.
+	 *
+	 * @return uint16_t The Accelerometer Z data.
+	 */
+	uint16_t getAccelerometerZ();
+
+	/**
+	 * @brief Get the Accelerometer X data.
+	 *
+	 * @return uint16_t The Accelerometer X data.
+	 */
+	uint16_t getAccelerometerX();
+
+
  private:
 	/**
 	 * @breif The slope of the State represented as a vector.
@@ -310,69 +373,11 @@ class State {
 	static uint16_t m_u16ScaledTanValuesSum;
 
 	/**
-	 * @brief Obtain the value of M.
-	 *
-	 * The value of M is calculated depending on the case of the state.
-	 *
-	 * @return uint8_t M.
-	 */
-	uint8_t calculateM(void);
-
-	/**
-	 * @brief Obtain the value of B.
-	 *
-	 * @return uint16_t B.
-	 */
-	uint16_t calculateB(void);
-
-	/**
 	 * @brief Obtain the case based on X data from the accelerometer.
 	 *
 	 * @return attitude::state::CaseX The current case.
 	 */
 	attitude::state::CaseX getAccelerometerXCase();
-
-	/**
-	 * @brief Set the value of M.
-	 *
-	 * @param i_u8M The value of M.
-	 */
-	void setM(uint8_t i_u8M);
-
-	/**
-	 * @brief Set the value of B.
-	 *
-	 * @param i_u16B The value of B.
-	 */
-	void setB(uint16_t i_u16B);
-
-	/**
-	 * @brief Get the Accelerometer Z data.
-	 *
-	 * @return uint16_t The Accelerometer Z data.
-	 */
-	uint16_t getAccelerometerZ();
-
-	/**
-	 * @brief Get the Accelerometer X data.
-	 *
-	 * @return uint16_t The Accelerometer X data.
-	 */
-	uint16_t getAccelerometerX();
-
-	/**
-	 * @brief Set the Accelerometer Z data.
-	 *
-	 * @param i_u16AccelerometerZ The Accelerometer Z data.
-	 */
-	void setAccelerometerZ(uint16_t i_u16AccelerometerZ);
-
-	/**
-	 * @brief Set the Accelerometer X data.
-	 *
-	 * @param i_u16AccelerometerX The Accelerometer X data.
-	 */
-	void setAccelerometerX(uint16_t i_u16AccelerometerX);
 
 	/**
 	 * @brief Calculate the pixels offset from the horizontal or vertical center
