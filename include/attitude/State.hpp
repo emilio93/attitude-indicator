@@ -195,6 +195,14 @@ class State {
 	uint16_t getB();
 
 	/**
+	 * @brief Get the the case based on X data from the accelerometer.
+	 *
+	 * @return attitude::state::CaseX The case based on X data from the
+	 * accelerometer.
+	 */
+	attitude::state::CaseX getCaseX(void);
+
+	/**
 	 * @brief Sends detailed info on the State via std::cout.
 	 *
 	 */
@@ -262,6 +270,19 @@ class State {
 	 */
 	uint16_t getAccelerometerX();
 
+	/**
+	 * @brief Set the case for X data from accelerometer.
+	 *
+	 * @param i_eCaseX The case for the X data from the accelerometer.
+	 */
+	void setCaseX(attitude::state::CaseX i_eCaseX);
+
+	/**
+	 * @brief Obtain the case based on X data from the accelerometer.
+	 *
+	 * @return attitude::state::CaseX The current case.
+	 */
+	attitude::state::CaseX calculateCaseX();
 
  private:
 	/**
@@ -352,6 +373,13 @@ class State {
 	uint16_t m_u16AccelerometerX;
 
 	/**
+	 * @brief The case of the M value depending on the X data from the
+	 * accelerometer.
+	 *
+	 */
+	attitude::state::CaseX m_eCaseX;
+
+	/**
 	 * @brief Indicates if the tan values have been calculated.
 	 *
 	 */
@@ -371,13 +399,6 @@ class State {
 	 * 45° rotation from the accelerometer X data.
 	 */
 	static uint16_t m_u16ScaledTanValuesSum;
-
-	/**
-	 * @brief Obtain the case based on X data from the accelerometer.
-	 *
-	 * @return attitude::state::CaseX The current case.
-	 */
-	attitude::state::CaseX getAccelerometerXCase();
 
 	/**
 	 * @brief Calculate the pixels offset from the horizontal or vertical center
