@@ -14,24 +14,16 @@ namespace task {
 class Accelerometer : public scheduler::Task {
  public:
 	Accelerometer(mkii::Accelerometer* i_pAccelerometer);
+
 	virtual uint8_t run(void);
 	virtual uint8_t setup(void);
 
- protected:
+	mkii::Accelerometer* getAccelerometer(void);
+
  private:
-	uint16_t m_u16X;
-	uint16_t m_u16Y;
-	uint16_t m_u16Z;
-
-	uint16_t m_u16OldZValue;
-
-	static Graphics_Context m_stStaticContext;
-
 	mkii::Accelerometer* m_pAccelerometer;
 
 	void setAccelerometer(mkii::Accelerometer* i_pAccelerometer);
-
-	mkii::Accelerometer* getAccelerometer(void);
 };
 
 }  // namespace task
