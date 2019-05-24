@@ -80,6 +80,7 @@ class RefreshScreenBackground : public scheduler::Task {
 	 *
 	 */
 	attitude::State* m_pState;
+	attitude::State* m_pOldState;
 
 	/**
 	 * Previous data from accelerometer.

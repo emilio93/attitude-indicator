@@ -10,6 +10,7 @@ task::RefreshScreenBackground::RefreshScreenBackground(
 	this->setState(i_pState);
 	this->setLcdScreen(i_pLcdScreen);
 	this->setContext(i_pContext);
+	this->m_pOldState = new attitude::State(this->getState()->getAccelerometerZ(), this->getState()->getAccelerometerX());
 }
 
 uint8_t task::RefreshScreenBackground::setup(void) {
@@ -51,7 +52,6 @@ void task::RefreshScreenBackground::repaintScreen() {
 
 	Graphics_Rectangle l_stRectBlue;
 	Graphics_Rectangle l_stRectBrown;
-
 	if (this->m_u16Z > l_u16Threshold) {
 		l_u16Dif = (this->m_u16Z - l_u16Threshold) / l_u16Divider;
 		l_u16Height = (attitude::state::SCREEN_Y / 2) - l_u16Dif;
@@ -71,6 +71,12 @@ void task::RefreshScreenBackground::repaintScreen() {
 			l_u16Height = attitude::state::SCREEN_Y;
 		}
 
+		this->getState()->setAccelerometerX(this->m_u16X);
+		this->getState()->setAccelerometerZ(this->m_u16Z);
+
+		this->getState()->setB(this->getState()->calculateB());
+		this->getState()->setM(this->getState()->calculateM());
+
 		Graphics_Context* l_pGraphicsContext = this->getContext();
 		l_stRectBlue = {0, 0, attitude::state::SCREEN_X, (uint8_t)l_u16Height};
 		l_stRectBrown = {0, attitude::state::SCREEN_Y, attitude::state::SCREEN_X,
@@ -80,39 +86,11 @@ void task::RefreshScreenBackground::repaintScreen() {
 		Graphics_setForegroundColor(l_pGraphicsContext, GRAPHICS_COLOR_PERU);
 		Graphics_fillRectangle(l_pGraphicsContext, &l_stRectBrown);
 
-		Graphics_setForegroundColor(l_pGraphicsContext, GRAPHICS_COLOR_WHITE);
-		this->setState(new attitude::State(this->m_u16Z, this->m_u16X));
+		Graphics_setForegroundColor(l_pGraphicsContext, GRAPHICS_COLOR_BLACK);
 		Graphics_drawLine(l_pGraphicsContext, this->getState()->getPointAX(),
 		                  this->getState()->getPointAY(),
 		                  this->getState()->getPointBX(),
 		                  this->getState()->getPointBY());
-
-		uint16_t l_tempAX = this->getState()->getPointAX();
-		uint16_t l_tempBX = this->getState()->getPointBX();
-		uint16_t l_tempAY = this->getState()->getPointAY();
-		uint16_t l_tempBY = this->getState()->getPointBY();
-
-		int ii = 10;
-		int jj = 0;
-		//		while ( ii ) {
-		ii--;
-
-		Graphics_setForegroundColor(l_pGraphicsContext, GRAPHICS_COLOR_LIGHT_BLUE);
-
-		Graphics_drawLine(l_pGraphicsContext, l_tempAX, l_tempAY, l_tempBX,
-		                  l_tempBY);
-
-		// Graphics_setForegroundColor(l_pGraphicsContext,
-		// 			      GRAPHICS_COLOR_PERU);
-
-		// Graphics_drawLine(l_pGraphicsContext, l_tempAX+ii,
-		// 		    l_tempAY,
-		// 		    l_tempBX+ii,
-		// 		    l_tempBY
-		// 		    );
-
-		//}
-
 		int i, maxi;
 		uint8_t j, k;
 		uint8_t l_u8LongLineHalfLenght = 8;
@@ -174,8 +152,6 @@ attitude::State* task::RefreshScreenBackground::getState(void) {
 }
 
 void task::RefreshScreenBackground::setState(attitude::State* i_pState) {
-	if (this->getState() != NULL) {
-		delete this->m_pState;
-	}
+
 	this->m_pState = i_pState;
 }
