@@ -130,6 +130,12 @@ const uint16_t TAN_ADD_VALUES[SCREEN_MAX / 2] = {
     877,  893,  910,  928,  947,  967,  989,  1011, 1035, 1060, 1087,
     1115, 1145, 1177, 1211, 1246, 1284, 1325, 1368, 1414, 1463, 1515,
     1571, 1631, 1695, 1764, 1838, 1918, 2005, 2097, 2198};
+
+// struct linePoint {
+// 	int8_t xValue;
+// 	int8_t yValue;
+// 	linePoint* nextPoint = NULL;
+// };
 }  // namespace state
 
 class State {
@@ -208,8 +214,6 @@ class State {
 	 */
 	void printInfo(bool i_bPrintHeader = false);
 
-
-
 	/**
 	 * @brief Set the Accelerometer Z data.
 	 *
@@ -240,13 +244,13 @@ class State {
 	 */
 	uint16_t calculateB(void);
 
-
 	/**
 	 * @brief Set the value of M.
 	 *
 	 * @param i_u8M The value of M.
 	 */
 	void setM(uint8_t i_u8M);
+	void setM(void);
 
 	/**
 	 * @brief Set the value of B.
@@ -254,7 +258,7 @@ class State {
 	 * @param i_u16B The value of B.
 	 */
 	void setB(uint16_t i_u16B);
-
+	void setB(void);
 
 	/**
 	 * @brief Get the Accelerometer Z data.
@@ -276,6 +280,7 @@ class State {
 	 * @param i_eCaseX The case for the X data from the accelerometer.
 	 */
 	void setCaseX(attitude::state::CaseX i_eCaseX);
+	void setCaseX(void);
 
 	/**
 	 * @brief Obtain the case based on X data from the accelerometer.
@@ -283,6 +288,7 @@ class State {
 	 * @return attitude::state::CaseX The current case.
 	 */
 	attitude::state::CaseX calculateCaseX();
+	int32_t* getLineH(void);
 
  private:
 	/**

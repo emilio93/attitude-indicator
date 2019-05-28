@@ -65,6 +65,7 @@ class RefreshScreenBackground : public scheduler::Task {
 	void setState(attitude::State* i_pState);
 
 	void repaintScreen(void);
+	void testLines(void);
 
  protected:
  private:

@@ -1,4 +1,9 @@
 #include "attitude/State.hpp"
+
+// namespace attitude {
+
+//   namespace state {
+
 uint16_t attitude::State::m_aScaledTanValues[attitude::state::SCREEN_MAX / 2] =
     {0};
 bool attitude::State::m_bHasCalculatedScaledTanValues = false;
@@ -11,11 +16,9 @@ attitude::State::State(uint16_t i_u16AccelerometerZ,
 	this->setAccelerometerZ(i_u16AccelerometerZ);
 	this->setAccelerometerX(i_u16AccelerometerX);
 
-	this->setCaseX(this->calculateCaseX());
-
 	// Set the B value from Accelerometer Z data
-	this->setB(this->calculateB());
-	this->setM(this->calculateM());
+	this->setB();
+	this->setM();
 }
 
 int32_t attitude::State::getPointAX() {
@@ -77,8 +80,12 @@ int32_t attitude::State::getPointBY() {
 }
 
 void attitude::State::setM(uint8_t i_u8M) { this->m_u8M = i_u8M; }
-uint8_t attitude::State::getM(void) { return this->m_u8M; }
+void attitude::State::setM(void) { this->m_u8M = this->calculateM(); }
+
 void attitude::State::setB(uint16_t i_u16B) { this->m_u16B = i_u16B; }
+void attitude::State::setB(void) { this->m_u16B = this->calculateB(); }
+
+uint8_t attitude::State::getM(void) { return this->m_u8M; }
 uint16_t attitude::State::getB(void) { return this->m_u16B; }
 attitude::state::CaseX attitude::State::getCaseX() { return this->m_eCaseX; }
 
@@ -116,6 +123,10 @@ void attitude::State::setCaseX(attitude::state::CaseX i_eCaseX) {
 	this->m_eCaseX = i_eCaseX;
 }
 
+void attitude::State::setCaseX(void) {
+	this->m_eCaseX = this->calculateCaseX();
+}
+
 void attitude::State::setAccelerometerZ(uint16_t i_u16AccelerometerZ) {
 	this->m_u16AccelerometerZ = i_u16AccelerometerZ;
 	if (i_u16AccelerometerZ > (attitude::state::ADC_Z_MID_VALUE +
@@ -128,6 +139,8 @@ void attitude::State::setAccelerometerZ(uint16_t i_u16AccelerometerZ) {
 		this->m_u16AccelerometerZ =
 		    attitude::state::ADC_Z_MID_VALUE - attitude::state::ADC_Z_MAX_VARIATION;
 	}
+	// If state change, it refresh current B
+	this->setB();
 }
 void attitude::State::setAccelerometerX(uint16_t i_u16AccelerometerX) {
 	this->m_u16AccelerometerX = i_u16AccelerometerX;
@@ -137,6 +150,9 @@ void attitude::State::setAccelerometerX(uint16_t i_u16AccelerometerX) {
 	if (i_u16AccelerometerX < attitude::state::ADC_X_LOWER_VALUE) {
 		this->m_u16AccelerometerX = attitude::state::ADC_X_LOWER_VALUE;
 	}
+	// If state change, it refresh current M
+	this->setCaseX();
+	this->setM();
 }
 
 uint16_t attitude::State::getAccelerometerZ() {
@@ -162,6 +178,45 @@ void attitude::State::setScaledTanValuesSum(uint16_t i_u16ScaledTanValuesSum) {
 
 uint16_t attitude::State::getScaledTanValuesSum(void) {
 	return attitude::State::m_u16ScaledTanValuesSum;
+}
+
+int32_t* attitude::State::getLineH(void) {
+	int32_t pAX = this->getPointAX();
+	int32_t pAY = this->getPointAY();
+	int32_t pBX = this->getPointBX();
+	int32_t pBY = this->getPointBY();
+
+	int16_t deltaX = (pBX - pAX);
+	int16_t deltaY = (pBY - pAY);
+	if (deltaY < 0) {
+		deltaY = -1 * deltaY;
+	}
+	int16_t realM = (pBY - pAY) / deltaX;
+	int16_t extra = deltaY % deltaX;
+
+	int16_t minX, maxX, minY, maxY;
+
+	minX = pAX < pBX ? pAX : pBX;
+	maxX = pAX > pBX ? pAX : pBX;
+	minY = pAY < pBY ? pAY : pBY;
+	maxY = pAY > pBY ? pAY : pBY;
+
+	int32_t* p_result = new int32_t[128];
+	for (int32_t y = 0; y < 128; y++) {
+		p_result[y] = 0;
+		if (false) {
+			while (true) {
+			}
+		}
+	}
+	// for (int16_t y = minY; y < maxY; y++) {
+	//   if ((y>0) && (y<128)){
+	//     p_result[y] = 64;
+	//   }
+
+	// }
+
+	return p_result;
 }
 
 void attitude::State::scaleTanValues(void) {
@@ -337,3 +392,6 @@ int main() {
 	return 0;
 }
 #endif
+
+//   }
+// }

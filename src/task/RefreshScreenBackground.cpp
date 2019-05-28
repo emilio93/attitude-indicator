@@ -1,5 +1,6 @@
 #include <iostream>
 
+#include "debug/printf.hpp"
 #include "task/RefreshScreenBackground.hpp"
 
 Graphics_Context* task::RefreshScreenBackground::m_pContext;
@@ -10,7 +11,9 @@ task::RefreshScreenBackground::RefreshScreenBackground(
 	this->setState(i_pState);
 	this->setLcdScreen(i_pLcdScreen);
 	this->setContext(i_pContext);
-	this->m_pOldState = new attitude::State(this->getState()->getAccelerometerZ(), this->getState()->getAccelerometerX());
+	this->m_pOldState =
+	    new attitude::State(this->getState()->getAccelerometerZ(),
+	                        this->getState()->getAccelerometerX());
 }
 
 uint8_t task::RefreshScreenBackground::setup(void) {
@@ -33,8 +36,66 @@ uint8_t task::RefreshScreenBackground::run(void) {
 	this->m_u16X = mkii::Accelerometer::GetX();
 	this->m_u16Y = mkii::Accelerometer::GetY();
 	this->m_u16Z = mkii::Accelerometer::GetZ();
-	this->repaintScreen();
+	// this->repaintScreen();
+	this->testLines();
 	return NO_ERR;
+}
+
+void task::RefreshScreenBackground::testLines() {
+	int16_t p1_x, p1_y, p2_x, p2_y;
+	p1_x = 0;
+	p1_y = 127;
+	p2_x = 127;
+	p2_y = 0;
+
+	Graphics_Context* l_pGraphicsContext = this->getContext();
+	Graphics_Rectangle l_stRectBlue = {0, 0, 127, 127};
+	Graphics_setBackgroundColor(l_pGraphicsContext, GRAPHICS_COLOR_BLACK);
+
+	uint8_t nPixel = 127;  // [ 0 - 127 ]
+	int16_t div_temp;      //=127/(128-nPixel);
+
+	this->getState()->setAccelerometerX(this->m_u16X);
+	this->getState()->setAccelerometerZ(this->m_u16Z);
+
+	// this->getState()->setCaseX();
+	// this->getState()->setM();
+	this->getState()->setB(64);
+
+	// attitude::state::linePoint* tmpLineH;
+	int32_t* lineH;
+	lineH = this->getState()->getLineH();
+
+	for (int32_t y = 0; y < 128; y++) {
+		Graphics_drawLineH(l_pGraphicsContext, 0, lineH[y], y);
+	}
+
+	delete[] lineH;
+
+	// Graphics_drawLine(l_pGraphicsContext, this->getState()->getPointAX(),
+	// 		  this->getState()->getPointAY(),
+	// 		  this->getState()->getPointBX(),
+	// 		  this->getState()->getPointBY());
+
+	// State::line_point temp_point;
+	// Graphics_drawLine(l_pGraphicsContext, p1_x, p1_y, p2_x, p2_y);
+
+	// 	while (true) {
+	// 		for (uint16_t i = 0; i < 0xFFFF; i++) {
+	// 			for (uint16_t j = 0; j < 0x000F; j++) {
+	// 			}
+	// 		}
+	// 		Graphics_setForegroundColor(l_pGraphicsContext, GRAPHICS_COLOR_WHITE);
+	// 		Graphics_fillRectangle(l_pGraphicsContext, &l_stRectBlue);
+	// 		Graphics_setForegroundColor(l_pGraphicsContext, GRAPHICS_COLOR_BLACK);
+
+	// 		nPixel--;
+	// 		div_temp = (127 / (128 - nPixel));
+	// 		for (int i = 0; i <= 128; i++) {
+	// 			Graphics_drawLineH(l_pGraphicsContext, p1_x, i - (i / div_temp),
+	// 			                   p1_y - i);
+	// 		}
+	// 	}
 }
 
 void task::RefreshScreenBackground::repaintScreen() {
@@ -152,6 +213,5 @@ attitude::State* task::RefreshScreenBackground::getState(void) {
 }
 
 void task::RefreshScreenBackground::setState(attitude::State* i_pState) {
-
 	this->m_pState = i_pState;
 }

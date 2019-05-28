@@ -35,8 +35,10 @@ done
 
 if [ $CCS_PATH ]
 then
-    ( cd $PROJ_DEBUG_PATH && $CCS_PATH/$CCS_MAKE_UTIL $CCS_MAKE_UTIL_FLAGS ) ||
+    ( cd $PROJ_DEBUG_PATH && $CCS_PATH/$CCS_MAKE_UTIL $CCS_MAKE_UTIL_FLAGS 2> $TEMP_FILE ) ||
 	(
+	    cat $TEMP_FILE
+	    grep --color=always '[ ]error[ ]' $TEMP_FILE
 	    while :
 	    do
 		sleep 0.2
@@ -58,13 +60,17 @@ then
 	    exit 2 ; }			   
 	PROJ_TARGOUT=$OUT_FILE
     done
-    lsusb -d $TI_CARD_ID && test -f $PROJ_TARGOUT &&
-	$CCS_PATH/$CCS_LOAD_UTIL -c $PROJ_TARGCNF -l $PROJ_TARGOUT &> $TEMP_FILE
-    lsusb -d $TI_CARD_ID && test -f $PROJ_TARGOUT &&
-	if grep -c 'no longer supported' $TEMP_FILE 
-	then
-	    $CCS_PATH_LEGA/$CCS_LOAD_UTIL -c $PROJ_TARGCNF_LEGA -l $PROJ_TARGOUT > $TEMP_FILE
-	fi
+    >$TEMP_FILE # Erase gmake info from buffer
+    if ( cd $PROJ_DEBUG_PATH && $CCS_PATH/$CCS_MAKE_UTIL $CCS_MAKE_UTIL_FLAGS &>/dev/null )
+    then
+	lsusb -d $TI_CARD_ID && test -f $PROJ_TARGOUT &&
+	    $CCS_PATH/$CCS_LOAD_UTIL -c $PROJ_TARGCNF -l $PROJ_TARGOUT &> $TEMP_FILE
+	lsusb -d $TI_CARD_ID && test -f $PROJ_TARGOUT &&
+	    if grep -c 'no longer supported' $TEMP_FILE
+	    then
+		$CCS_PATH_LEGA/$CCS_LOAD_UTIL -c $PROJ_TARGCNF_LEGA -l $PROJ_TARGOUT &> $TEMP_FILE
+	    fi
+    fi
     cat $TEMP_FILE
     rm $TEMP_FILE
 else
