@@ -12,6 +12,12 @@
 #include "task/LED.hpp"
 #include "task/RefreshScreenBackground.hpp"
 
+
+#include <stdint.h>
+#include <stdbool.h>
+#include "debug/printf.hpp"
+#include "driverlib.h"
+
 // ##########################
 // Global/Static declarations
 // ##########################
@@ -25,6 +31,19 @@ mkii::Led* g_pRedLed =
 Graphics_Context* g_pContext;
 
 void T32_INT1_IRQHandler(void);
+
+const eUSCI_UART_Config uartConfig =
+{
+    EUSCI_A_UART_CLOCKSOURCE_SMCLK,          // SMCLK Clock Source
+    78,                                      // BRDIV = 78
+    2,                                       // UCxBRF = 2
+    0,                                       // UCxBRS = 0
+    EUSCI_A_UART_NO_PARITY,                  // No Parity
+    EUSCI_A_UART_LSB_FIRST,                  // MSB First
+    EUSCI_A_UART_ONE_STOP_BIT,               // One stop bit
+    EUSCI_A_UART_MODE,                       // UART mode
+    EUSCI_A_UART_OVERSAMPLING_BAUDRATE_GENERATION  // Oversampling
+};
 
 // #########################
 //          MAIN
@@ -90,10 +109,32 @@ void Setup(void) {
 	l_pTimer->SetCounter(TIMER32_COUNT);
 	l_pTimer->SetInterrupt(T32_INT1_IRQHandler);
 
+    /* Setup debug */
+    debugSetup();
+
 	/* Enable Interrupts */
 	MAP_Interrupt_enableMaster();
 
+
 	return;
+}
+
+
+// ***********************************
+// Setup function for debug using UART
+// ***********************************
+void debugSetup ()
+{
+    /* Selecting P1.2 and P1.3 in UART mode */
+    MAP_GPIO_setAsPeripheralModuleFunctionInputPin(GPIO_PORT_P1,
+                GPIO_PIN1 | GPIO_PIN2 | GPIO_PIN3, GPIO_PRIMARY_MODULE_FUNCTION);
+    /* Configuring UART Module */
+    MAP_UART_initModule( EUSCI_A0_BASE, &uartConfig);
+
+    /* Enable UART module */
+    MAP_UART_enableModule(EUSCI_A0_BASE);   
+    
+    return;
 }
 
 // - Handle the Timer32 Interrupt
