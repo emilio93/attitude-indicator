@@ -1,0 +1,4 @@
+<map id="mkii::LightSensor" name="mkii::LightSensor">
+<area shape="rect" id="node2" href="$classperipheral_1_1_o_p_t3001.html" title="peripheral::OPT3001" alt="" coords="15,95,157,121"/>
+<area shape="rect" id="node3" href="$classperipheral_1_1opt3001_1_1_i2_c.html" title="peripheral::opt3001::I2C" alt="" coords="5,5,167,32"/>
+</map>

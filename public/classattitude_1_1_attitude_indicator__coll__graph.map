@@ -1,0 +1,6 @@
+<map id="attitude::AttitudeIndicator" name="attitude::AttitudeIndicator">
+<area shape="rect" id="node2" href="$structattitude_1_1attitude_indicator_1_1_state.html" title="attitude::attitudeIndicator\l::State" alt="" coords="5,184,172,225"/>
+<area shape="rect" id="node3" href="$classmkii_1_1_accelerometer.html" title="mkii::Accelerometer" alt="" coords="197,191,335,218"/>
+<area shape="rect" id="node4" href="$classperipheral_1_1_adc14.html" title="peripheral::Adc14" alt="" coords="205,95,327,121"/>
+<area shape="rect" id="node5" href="$classperipheral_1_1_g_p_i_o.html" title="peripheral::GPIO" alt="" coords="207,5,325,32"/>
+</map>

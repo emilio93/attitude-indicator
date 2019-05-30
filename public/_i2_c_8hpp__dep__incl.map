@@ -1,0 +1,7 @@
+<map id="lib/mkii/include/peripheral/opt3001/I2C.hpp" name="lib/mkii/include/peripheral/opt3001/I2C.hpp">
+<area shape="rect" id="node2" href="$_light_sensor_8hpp.html" title="lib/mkii/include/mkii\l/LightSensor.hpp" alt="" coords="43,184,179,225"/>
+<area shape="rect" id="node4" href="$_o_p_t3001_8hpp.html" title="lib/mkii/include/peripheral\l/OPT3001.hpp" alt="" coords="148,95,316,136"/>
+<area shape="rect" id="node6" href="$_i2_c_8cpp.html" title="lib/mkii/src/peripheral\l/opt3001/I2C.cpp" alt="" coords="341,95,486,136"/>
+<area shape="rect" id="node3" href="$_light_sensor_8cpp.html" title="lib/mkii/src/mkii/LightSensor.cpp" alt="" coords="5,273,216,300"/>
+<area shape="rect" id="node5" href="$_o_p_t3001_8cpp.html" title="lib/mkii/src/peripheral\l/OPT3001.cpp" alt="" coords="203,184,349,225"/>
+</map>

@@ -1,0 +1,4 @@
+<map id="peripheral::GPIO" name="peripheral::GPIO">
+<area shape="rect" id="node2" href="$classperipheral_1_1gpio_1_1_input_g_p_i_o.html" title="peripheral::gpio::InputGPIO" alt="" coords="5,80,185,107"/>
+<area shape="rect" id="node3" href="$classperipheral_1_1gpio_1_1_output_g_p_i_o.html" title="peripheral::gpio::OutputGPIO" alt="" coords="209,80,400,107"/>
+</map>

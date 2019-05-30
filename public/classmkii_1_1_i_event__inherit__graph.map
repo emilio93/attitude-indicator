@@ -1,0 +1,5 @@
+<map id="mkii::IEvent" name="mkii::IEvent">
+<area shape="rect" id="node2" href="$classmkii_1_1event_1_1_blink.html" title="mkii::event::Blink" alt="" coords="5,80,128,107"/>
+<area shape="rect" id="node3" href="$classmkii_1_1event_1_1_led_timeout.html" title="mkii::event::LedTimeout" alt="" coords="152,80,315,107"/>
+<area shape="rect" id="node4" href="$classmkii_1_1event_1_1_push.html" title="mkii::event::Push" alt="" coords="339,80,463,107"/>
+</map>

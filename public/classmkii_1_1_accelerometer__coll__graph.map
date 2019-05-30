@@ -1,0 +1,4 @@
+<map id="mkii::Accelerometer" name="mkii::Accelerometer">
+<area shape="rect" id="node2" href="$classperipheral_1_1_adc14.html" title="peripheral::Adc14" alt="" coords="13,95,136,121"/>
+<area shape="rect" id="node3" href="$classperipheral_1_1_g_p_i_o.html" title="peripheral::GPIO" alt="" coords="15,5,134,32"/>
+</map>

@@ -1,0 +1,5 @@
+<map id="scheduler::Task" name="scheduler::Task">
+<area shape="rect" id="node2" href="$classtask_1_1_accelerometer.html" title="task::Accelerometer" alt="" coords="5,80,144,107"/>
+<area shape="rect" id="node3" href="$classtask_1_1_l_e_d.html" title="task::LED" alt="" coords="169,80,250,107"/>
+<area shape="rect" id="node4" href="$classtask_1_1_refresh_screen_background.html" title="task::RefreshScreenBackground" alt="" coords="273,80,484,107"/>
+</map>

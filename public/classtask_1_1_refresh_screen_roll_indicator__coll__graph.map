@@ -1,0 +1,8 @@
+<map id="task::RefreshScreenRollIndicator" name="task::RefreshScreenRollIndicator">
+<area shape="rect" id="node2" href="$classscheduler_1_1_task.html" title="scheduler::Task" alt="" coords="5,292,120,319"/>
+<area shape="rect" id="node3" href="$struct_graphics___context.html" title="Graphics_Context" alt="" coords="145,292,271,319"/>
+<area shape="rect" id="node4" href="$classperipheral_1_1_lcd_screen.html" title="peripheral::LcdScreen" alt="" coords="295,292,443,319"/>
+<area shape="rect" id="node5" href="$classperipheral_1_1lcd_screen_1_1_spi.html" title="peripheral::lcdScreen::Spi" alt="" coords="284,203,455,229"/>
+<area shape="rect" id="node6" href="$classperipheral_1_1_g_p_i_o.html" title="peripheral::GPIO" alt="" coords="305,5,423,32"/>
+<area shape="rect" id="node7" href="$classperipheral_1_1gpio_1_1_output_g_p_i_o.html" title="peripheral::gpio::OutputGPIO" alt="" coords="459,83,650,109"/>
+</map>

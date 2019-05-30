@@ -1,0 +1,6 @@
+<map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
+<area shape="rect" id="node1" href="$classscheduler_1_1_task.html" title="scheduler::Task" alt="" coords="5,56,120,83"/>
+<area shape="rect" id="node2" href="$classtask_1_1_accelerometer.html" title="task::Accelerometer" alt="" coords="204,5,343,32"/>
+<area shape="rect" id="node3" href="$classtask_1_1_l_e_d.html" title="task::LED" alt="" coords="233,56,314,83"/>
+<area shape="rect" id="node4" href="$classtask_1_1_refresh_screen_background.html" title="task::RefreshScreenBackground" alt="" coords="168,107,379,133"/>
+</map>
