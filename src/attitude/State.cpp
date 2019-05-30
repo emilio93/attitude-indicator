@@ -1,9 +1,5 @@
 #include "attitude/State.hpp"
 
-// namespace attitude {
-
-//   namespace state {
-
 uint16_t attitude::State::m_aScaledTanValues[attitude::state::SCREEN_MAX / 2] =
     {0};
 bool attitude::State::m_bHasCalculatedScaledTanValues = false;
@@ -180,43 +176,56 @@ uint16_t attitude::State::getScaledTanValuesSum(void) {
 	return attitude::State::m_u16ScaledTanValuesSum;
 }
 
-int32_t* attitude::State::getLineH(void) {
+// attitude::state::linePoint* attitude::State::getLineH(void) {
+void attitude::State::getLineH(int32_t* p_lineH) {
 	int32_t pAX = this->getPointAX();
 	int32_t pAY = this->getPointAY();
 	int32_t pBX = this->getPointBX();
 	int32_t pBY = this->getPointBY();
 
-	int16_t deltaX = (pBX - pAX);
-	int16_t deltaY = (pBY - pAY);
-	if (deltaY < 0) {
-		deltaY = -1 * deltaY;
-	}
-	int16_t realM = (pBY - pAY) / deltaX;
-	int16_t extra = deltaY % deltaX;
-
 	int16_t minX, maxX, minY, maxY;
 
-	minX = pAX < pBX ? pAX : pBX;
-	maxX = pAX > pBX ? pAX : pBX;
+	minX = pAY < pBY ? pAX : pBX;
+	maxX = pAY < pBY ? pBX : pAX;
+
 	minY = pAY < pBY ? pAY : pBY;
 	maxY = pAY > pBY ? pAY : pBY;
 
-	int32_t* p_result = new int32_t[128];
-	for (int32_t y = 0; y < 128; y++) {
-		p_result[y] = 0;
-		if (false) {
-			while (true) {
-			}
+	float deltaX = (maxX - minX);
+	float deltaY = (maxY - minY);
+
+	// float realMX = (float)(pBY - pAY) / (float)(deltaX);
+
+	float realMY = deltaX / deltaY;
+
+	float tmpX = (float)minX;
+
+	int32_t default_val;
+
+	if (pAY < pBY) {
+		default_val = 0;
+	} else {
+		default_val = 127;
+	}
+	for (int32_t y = 0; y < minY; y++) {
+		p_lineH[y] = default_val;
+	}
+
+	if (pAY > pBY) {
+		default_val = 0;
+	} else {
+		default_val = 127;
+	}
+	for (int32_t y = maxY; y < 128; y++) {
+		p_lineH[y] = default_val;
+	}
+
+	for (int32_t y = minY; y < maxY; y++) {
+		tmpX += realMY;
+		if ((y > 0) && (y < 128)) {
+			p_lineH[y] = (int32_t)tmpX;
 		}
 	}
-	// for (int16_t y = minY; y < maxY; y++) {
-	//   if ((y>0) && (y<128)){
-	//     p_result[y] = 64;
-	//   }
-
-	// }
-
-	return p_result;
 }
 
 void attitude::State::scaleTanValues(void) {
@@ -392,6 +401,3 @@ int main() {
 	return 0;
 }
 #endif
-
-//   }
-// }

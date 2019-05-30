@@ -62,6 +62,8 @@ class RefreshScreenBackground : public scheduler::Task {
 	Graphics_Context* getContext(void);
 
 	attitude::State* getState(void);
+	attitude::State* getOldState(void);
+
 	void setState(attitude::State* i_pState);
 
 	void repaintScreen(void);

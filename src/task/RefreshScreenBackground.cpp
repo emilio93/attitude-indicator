@@ -42,15 +42,9 @@ uint8_t task::RefreshScreenBackground::run(void) {
 }
 
 void task::RefreshScreenBackground::testLines() {
-	int16_t p1_x, p1_y, p2_x, p2_y;
-	p1_x = 0;
-	p1_y = 127;
-	p2_x = 127;
-	p2_y = 0;
-
 	Graphics_Context* l_pGraphicsContext = this->getContext();
-	Graphics_Rectangle l_stRectBlue = {0, 0, 127, 127};
-	Graphics_setBackgroundColor(l_pGraphicsContext, GRAPHICS_COLOR_BLACK);
+	// Graphics_Rectangle l_stRectBlue = {0, 0, 127, 127};
+	// Graphics_setBackgroundColor(l_pGraphicsContext, GRAPHICS_COLOR_WHITE);
 
 	uint8_t nPixel = 127;  // [ 0 - 127 ]
 	int16_t div_temp;      //=127/(128-nPixel);
@@ -60,17 +54,34 @@ void task::RefreshScreenBackground::testLines() {
 
 	// this->getState()->setCaseX();
 	// this->getState()->setM();
-	this->getState()->setB(64);
+	// this->getState()->setB(64);
 
-	// attitude::state::linePoint* tmpLineH;
-	int32_t* lineH;
-	lineH = this->getState()->getLineH();
+	int32_t lineH[128] = {0};
+	int32_t oldLineH[128] = {0};
+	this->getState()->getLineH(lineH);
+	this->getOldState()->getLineH(oldLineH);
 
-	for (int32_t y = 0; y < 128; y++) {
-		Graphics_drawLineH(l_pGraphicsContext, 0, lineH[y], y);
+	if (this->getState()->getPointAY() < this->getState()->getPointBY()) {
+		Graphics_setForegroundColor(l_pGraphicsContext, GRAPHICS_COLOR_PERU);
+		for (int y = 0; y < 127; y++) {
+			Graphics_drawLineH(l_pGraphicsContext, 0, lineH[y], y);
+		}
+		Graphics_setForegroundColor(l_pGraphicsContext, GRAPHICS_COLOR_LIGHT_BLUE);
+		for (int y = 0; y < 127; y++) {
+			Graphics_drawLineH(l_pGraphicsContext, lineH[y], 127, y);
+		}
+	} else {
+		Graphics_setForegroundColor(l_pGraphicsContext, GRAPHICS_COLOR_LIGHT_BLUE);
+		for (int y = 0; y < 127; y++) {
+			Graphics_drawLineH(l_pGraphicsContext, 0, lineH[y], y);
+		}
+		Graphics_setForegroundColor(l_pGraphicsContext, GRAPHICS_COLOR_PERU);
+		for (int y = 0; y < 127; y++) {
+			Graphics_drawLineH(l_pGraphicsContext, lineH[y], 127, y);
+		}
 	}
 
-	delete[] lineH;
+	// delete[] lineH;
 
 	// Graphics_drawLine(l_pGraphicsContext, this->getState()->getPointAX(),
 	// 		  this->getState()->getPointAY(),
@@ -210,6 +221,10 @@ Graphics_Context* task::RefreshScreenBackground::getContext(void) {
 
 attitude::State* task::RefreshScreenBackground::getState(void) {
 	return this->m_pState;
+}
+
+attitude::State* task::RefreshScreenBackground::getOldState(void) {
+	return this->m_pOldState;
 }
 
 void task::RefreshScreenBackground::setState(attitude::State* i_pState) {

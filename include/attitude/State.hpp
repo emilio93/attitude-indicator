@@ -131,11 +131,10 @@ const uint16_t TAN_ADD_VALUES[SCREEN_MAX / 2] = {
     1115, 1145, 1177, 1211, 1246, 1284, 1325, 1368, 1414, 1463, 1515,
     1571, 1631, 1695, 1764, 1838, 1918, 2005, 2097, 2198};
 
-// struct linePoint {
-// 	int8_t xValue;
-// 	int8_t yValue;
-// 	linePoint* nextPoint = NULL;
-// };
+struct linePoint {
+	int8_t value;
+	linePoint* nextPoint = NULL;
+};
 }  // namespace state
 
 class State {
@@ -288,7 +287,8 @@ class State {
 	 * @return attitude::state::CaseX The current case.
 	 */
 	attitude::state::CaseX calculateCaseX();
-	int32_t* getLineH(void);
+	// attitude::state::linePoint* getLineH(void);
+	void getLineH(int32_t* p_lineH);
 
  private:
 	/**
