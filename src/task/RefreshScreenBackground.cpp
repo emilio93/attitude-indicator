@@ -55,7 +55,9 @@ void task::RefreshScreenBackground::testLines() {
 	// this->getState()->setCaseX();
 	// this->getState()->setM();
 	// this->getState()->setB(64);
-
+	if (this->getState()->getPointAY() == this->getState()->getPointBY()) {
+return;
+}
 	int32_t lineH[128] = {0};
 	int32_t oldLineH[128] = {0};
 	this->getState()->getLineH(lineH);
@@ -63,24 +65,32 @@ void task::RefreshScreenBackground::testLines() {
 
 	if (this->getState()->getPointAY() < this->getState()->getPointBY()) {
 		Graphics_setForegroundColor(l_pGraphicsContext, GRAPHICS_COLOR_PERU);
-		for (int y = 0; y < 127; y++) {
+		for (int y = 0; y < 128; y++) {
 			Graphics_drawLineH(l_pGraphicsContext, 0, lineH[y], y);
 		}
 		Graphics_setForegroundColor(l_pGraphicsContext, GRAPHICS_COLOR_LIGHT_BLUE);
-		for (int y = 0; y < 127; y++) {
-			Graphics_drawLineH(l_pGraphicsContext, lineH[y], 127, y);
+		for (int y = 0; y < 128; y++) {
+			Graphics_drawLineH(l_pGraphicsContext, lineH[y], 128, y);
 		}
 	} else {
+
 		Graphics_setForegroundColor(l_pGraphicsContext, GRAPHICS_COLOR_LIGHT_BLUE);
-		for (int y = 0; y < 127; y++) {
+		for (int y = 0; y < 128; y++) {
 			Graphics_drawLineH(l_pGraphicsContext, 0, lineH[y], y);
 		}
 		Graphics_setForegroundColor(l_pGraphicsContext, GRAPHICS_COLOR_PERU);
-		for (int y = 0; y < 127; y++) {
-			Graphics_drawLineH(l_pGraphicsContext, lineH[y], 127, y);
+		for (int y = 0; y < 128; y++) {
+			Graphics_drawLineH(l_pGraphicsContext, lineH[y], 128, y);
 		}
+
 	}
 
+
+		Graphics_setForegroundColor(l_pGraphicsContext, GRAPHICS_COLOR_BLACK);
+		Graphics_drawLine(l_pGraphicsContext, this->getState()->getPointAX(),
+		                  this->getState()->getPointAY(),
+		                  this->getState()->getPointBX(),
+		                  this->getState()->getPointBY());
 	// delete[] lineH;
 
 	// Graphics_drawLine(l_pGraphicsContext, this->getState()->getPointAX(),
