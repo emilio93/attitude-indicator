@@ -176,54 +176,51 @@ uint16_t attitude::State::getScaledTanValuesSum(void) {
 	return attitude::State::m_u16ScaledTanValuesSum;
 }
 
-// attitude::state::linePoint* attitude::State::getLineH(void) {
-void attitude::State::getLineH(int32_t* p_lineH) {
-	int32_t pAX = this->getPointAX();
-	int32_t pAY = this->getPointAY();
-	int32_t pBX = this->getPointBX();
-	int32_t pBY = this->getPointBY();
+void attitude::State::getLineH(int32_t* i_pLineH) {
+	int32_t l_i32pAX = this->getPointAX();
+	int32_t l_i32pAY = this->getPointAY();
+	int32_t l_i32pBX = this->getPointBX();
+	int32_t l_i32pBY = this->getPointBY();
 
-	int16_t minX, maxX, minY, maxY;
+	int16_t l_i32minX, l_i32maxX, l_i32minY, l_i32maxY;
 
-	minX = pAY < pBY ? pAX : pBX;
-	maxX = pAY < pBY ? pBX : pAX;
+	l_i32minX = l_i32pAY < l_i32pBY ? l_i32pAX : l_i32pBX;
+	l_i32maxX = l_i32pAY < l_i32pBY ? l_i32pBX : l_i32pAX;
 
-	minY = pAY < pBY ? pAY : pBY;
-	maxY = pAY > pBY ? pAY : pBY;
+	l_i32minY = l_i32pAY < l_i32pBY ? l_i32pAY : l_i32pBY;
+	l_i32maxY = l_i32pAY > l_i32pBY ? l_i32pAY : l_i32pBY;
 
-	float deltaX = (maxX - minX);
-	float deltaY = (maxY - minY);
+	float l_fdeltaX = (l_i32maxX - l_i32minX);
+	float l_fdeltaY = (l_i32maxY - l_i32minY);
 
-	// float realMX = (float)(pBY - pAY) / (float)(deltaX);
+	float l_fRealMY = l_fdeltaX / l_fdeltaY;
 
-	float realMY = deltaX / deltaY;
+	float l_fTmpX = (float)l_i32minX;
 
-	float tmpX = (float)minX;
+	int32_t l_fdefault_val;
 
-	int32_t default_val;
-
-	if (pAY < pBY) {
-		default_val = 0;
+	if (l_i32pAY < l_i32pBY) {
+		l_fdefault_val = 0;
 	} else {
-		default_val = 127;
+		l_fdefault_val = 127;
 	}
-	for (int32_t y = 0; y < minY; y++) {
-		p_lineH[y] = default_val;
+	for (int32_t y = 0; y < l_i32minY; y++) {
+		i_pLineH[y] = l_fdefault_val;
 	}
 
-	if (pAY > pBY) {
-		default_val = 0;
+	if (l_i32pAY > l_i32pBY) {
+		l_fdefault_val = 0;
 	} else {
-		default_val = 127;
+		l_fdefault_val = 127;
 	}
-	for (int32_t y = maxY; y < 128; y++) {
-		p_lineH[y] = default_val;
+	for (int32_t y = l_i32maxY; y < 128; y++) {
+		i_pLineH[y] = l_fdefault_val;
 	}
 
-	for (int32_t y = minY; y < maxY; y++) {
-		tmpX += realMY;
+	for (int32_t y = l_i32minY; y < l_i32maxY; y++) {
+		l_fTmpX += l_fRealMY;
 		if ((y > 0) && (y < 128)) {
-			p_lineH[y] = (int32_t)tmpX;
+			i_pLineH[y] = (int32_t)l_fTmpX;
 		}
 	}
 }

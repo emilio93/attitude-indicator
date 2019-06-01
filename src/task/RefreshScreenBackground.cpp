@@ -43,80 +43,43 @@ uint8_t task::RefreshScreenBackground::run(void) {
 
 void task::RefreshScreenBackground::testLines() {
 	Graphics_Context* l_pGraphicsContext = this->getContext();
-	// Graphics_Rectangle l_stRectBlue = {0, 0, 127, 127};
-	// Graphics_setBackgroundColor(l_pGraphicsContext, GRAPHICS_COLOR_WHITE);
-
-	uint8_t nPixel = 127;  // [ 0 - 127 ]
-	int16_t div_temp;      //=127/(128-nPixel);
 
 	this->getState()->setAccelerometerX(this->m_u16X);
 	this->getState()->setAccelerometerZ(this->m_u16Z);
 
-	// this->getState()->setCaseX();
-	// this->getState()->setM();
-	// this->getState()->setB(64);
 	if (this->getState()->getPointAY() == this->getState()->getPointBY()) {
-return;
-}
-	int32_t lineH[128] = {0};
-	int32_t oldLineH[128] = {0};
-	this->getState()->getLineH(lineH);
-	this->getOldState()->getLineH(oldLineH);
+		return;
+	}
+	int32_t l_pLineH[128] = {0};
+	int32_t l_pOldLineH[128] = {0};
+	this->getState()->getLineH(l_pLineH);
+	this->getOldState()->getLineH(l_pOldLineH);
 
 	if (this->getState()->getPointAY() < this->getState()->getPointBY()) {
 		Graphics_setForegroundColor(l_pGraphicsContext, GRAPHICS_COLOR_PERU);
 		for (int y = 0; y < 128; y++) {
-			Graphics_drawLineH(l_pGraphicsContext, 0, lineH[y], y);
+			Graphics_drawLineH(l_pGraphicsContext, 0, l_pLineH[y], y);
 		}
 		Graphics_setForegroundColor(l_pGraphicsContext, GRAPHICS_COLOR_LIGHT_BLUE);
 		for (int y = 0; y < 128; y++) {
-			Graphics_drawLineH(l_pGraphicsContext, lineH[y], 128, y);
+			Graphics_drawLineH(l_pGraphicsContext, l_pLineH[y], 128, y);
 		}
 	} else {
-
 		Graphics_setForegroundColor(l_pGraphicsContext, GRAPHICS_COLOR_LIGHT_BLUE);
 		for (int y = 0; y < 128; y++) {
-			Graphics_drawLineH(l_pGraphicsContext, 0, lineH[y], y);
+			Graphics_drawLineH(l_pGraphicsContext, 0, l_pLineH[y], y);
 		}
 		Graphics_setForegroundColor(l_pGraphicsContext, GRAPHICS_COLOR_PERU);
 		for (int y = 0; y < 128; y++) {
-			Graphics_drawLineH(l_pGraphicsContext, lineH[y], 128, y);
+			Graphics_drawLineH(l_pGraphicsContext, l_pLineH[y], 128, y);
 		}
-
 	}
 
-
-		Graphics_setForegroundColor(l_pGraphicsContext, GRAPHICS_COLOR_BLACK);
-		Graphics_drawLine(l_pGraphicsContext, this->getState()->getPointAX(),
-		                  this->getState()->getPointAY(),
-		                  this->getState()->getPointBX(),
-		                  this->getState()->getPointBY());
-	// delete[] lineH;
-
-	// Graphics_drawLine(l_pGraphicsContext, this->getState()->getPointAX(),
-	// 		  this->getState()->getPointAY(),
-	// 		  this->getState()->getPointBX(),
-	// 		  this->getState()->getPointBY());
-
-	// State::line_point temp_point;
-	// Graphics_drawLine(l_pGraphicsContext, p1_x, p1_y, p2_x, p2_y);
-
-	// 	while (true) {
-	// 		for (uint16_t i = 0; i < 0xFFFF; i++) {
-	// 			for (uint16_t j = 0; j < 0x000F; j++) {
-	// 			}
-	// 		}
-	// 		Graphics_setForegroundColor(l_pGraphicsContext, GRAPHICS_COLOR_WHITE);
-	// 		Graphics_fillRectangle(l_pGraphicsContext, &l_stRectBlue);
-	// 		Graphics_setForegroundColor(l_pGraphicsContext, GRAPHICS_COLOR_BLACK);
-
-	// 		nPixel--;
-	// 		div_temp = (127 / (128 - nPixel));
-	// 		for (int i = 0; i <= 128; i++) {
-	// 			Graphics_drawLineH(l_pGraphicsContext, p1_x, i - (i / div_temp),
-	// 			                   p1_y - i);
-	// 		}
-	// 	}
+	Graphics_setForegroundColor(l_pGraphicsContext, GRAPHICS_COLOR_BLACK);
+	Graphics_drawLine(l_pGraphicsContext, this->getState()->getPointAX(),
+	                  this->getState()->getPointAY(),
+	                  this->getState()->getPointBX(),
+	                  this->getState()->getPointBY());
 }
 
 void task::RefreshScreenBackground::repaintScreen() {

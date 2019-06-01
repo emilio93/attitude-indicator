@@ -132,8 +132,8 @@ const uint16_t TAN_ADD_VALUES[SCREEN_MAX / 2] = {
     1571, 1631, 1695, 1764, 1838, 1918, 2005, 2097, 2198};
 
 struct linePoint {
-	int8_t value;
-	linePoint* nextPoint = NULL;
+	int8_t m_u8Value;
+	linePoint* m_pNextPoint = NULL;
 };
 }  // namespace state
 
