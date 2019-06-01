@@ -8,13 +8,15 @@
 #include "mkii/Accelerometer.hpp"
 #include "peripheral/LcdScreen.hpp"
 
+#include "attitude/State.hpp"
 #include "scheduler/Task.hpp"
 
 namespace task {
 
 class RefreshScreenBackground : public scheduler::Task {
  public:
-	RefreshScreenBackground(peripheral::LcdScreen* i_pLcdScreen,
+	RefreshScreenBackground(attitude::State* o_pState,
+	                        peripheral::LcdScreen* i_pLcdScreen,
 	                        Graphics_Context* i_pContext);
 
 	/**
@@ -59,7 +61,13 @@ class RefreshScreenBackground : public scheduler::Task {
 	 */
 	Graphics_Context* getContext(void);
 
+	attitude::State* getState(void);
+	attitude::State* getOldState(void);
+
+	void setState(attitude::State* i_pState);
+
 	void repaintScreen(void);
+	void testLines(void);
 
  protected:
  private:
@@ -69,6 +77,13 @@ class RefreshScreenBackground : public scheduler::Task {
 	uint16_t m_u16X;
 	uint16_t m_u16Y;
 	uint16_t m_u16Z;
+
+	/**
+	 * The current state to draw.
+	 *
+	 */
+	attitude::State* m_pState;
+	attitude::State* m_pOldState;
 
 	/**
 	 * Previous data from accelerometer.

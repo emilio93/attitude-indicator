@@ -1,13 +1,19 @@
 #include <iostream>
 
+#include "debug/printf.hpp"
 #include "task/RefreshScreenBackground.hpp"
 
 Graphics_Context* task::RefreshScreenBackground::m_pContext;
 
 task::RefreshScreenBackground::RefreshScreenBackground(
-    peripheral::LcdScreen* i_pLcdScreen, Graphics_Context* i_pContext) {
+    attitude::State* i_pState, peripheral::LcdScreen* i_pLcdScreen,
+    Graphics_Context* i_pContext) {
+	this->setState(i_pState);
 	this->setLcdScreen(i_pLcdScreen);
 	this->setContext(i_pContext);
+	this->m_pOldState =
+	    new attitude::State(this->getState()->getAccelerometerZ(),
+	                        this->getState()->getAccelerometerX());
 }
 
 uint8_t task::RefreshScreenBackground::setup(void) {
@@ -30,32 +36,73 @@ uint8_t task::RefreshScreenBackground::run(void) {
 	this->m_u16X = mkii::Accelerometer::GetX();
 	this->m_u16Y = mkii::Accelerometer::GetY();
 	this->m_u16Z = mkii::Accelerometer::GetZ();
-	this->repaintScreen();
+	// this->repaintScreen();
+	this->testLines();
 	return NO_ERR;
 }
 
-void task::RefreshScreenBackground::repaintScreen() {
-	uint16_t l_u16Threshold = 8192;
+void task::RefreshScreenBackground::testLines() {
+	Graphics_Context* l_pGraphicsContext = this->getContext();
 
-	uint16_t l_u16LimitThreshold = 3258;
+	this->getState()->setAccelerometerX(this->m_u16X);
+	this->getState()->setAccelerometerZ(this->m_u16Z);
+
+	if (this->getState()->getPointAY() == this->getState()->getPointBY()) {
+		return;
+	}
+	int32_t l_pLineH[128] = {0};
+	int32_t l_pOldLineH[128] = {0};
+	this->getState()->getLineH(l_pLineH);
+	this->getOldState()->getLineH(l_pOldLineH);
+
+	if (this->getState()->getPointAY() < this->getState()->getPointBY()) {
+		Graphics_setForegroundColor(l_pGraphicsContext, GRAPHICS_COLOR_PERU);
+		for (int y = 0; y < 128; y++) {
+			Graphics_drawLineH(l_pGraphicsContext, 0, l_pLineH[y], y);
+		}
+		Graphics_setForegroundColor(l_pGraphicsContext, GRAPHICS_COLOR_LIGHT_BLUE);
+		for (int y = 0; y < 128; y++) {
+			Graphics_drawLineH(l_pGraphicsContext, l_pLineH[y], 128, y);
+		}
+	} else {
+		Graphics_setForegroundColor(l_pGraphicsContext, GRAPHICS_COLOR_LIGHT_BLUE);
+		for (int y = 0; y < 128; y++) {
+			Graphics_drawLineH(l_pGraphicsContext, 0, l_pLineH[y], y);
+		}
+		Graphics_setForegroundColor(l_pGraphicsContext, GRAPHICS_COLOR_PERU);
+		for (int y = 0; y < 128; y++) {
+			Graphics_drawLineH(l_pGraphicsContext, l_pLineH[y], 128, y);
+		}
+	}
+
+	Graphics_setForegroundColor(l_pGraphicsContext, GRAPHICS_COLOR_BLACK);
+	Graphics_drawLine(l_pGraphicsContext, this->getState()->getPointAX(),
+	                  this->getState()->getPointAY(),
+	                  this->getState()->getPointBX(),
+	                  this->getState()->getPointBY());
+}
+
+void task::RefreshScreenBackground::repaintScreen() {
+	uint16_t l_u16Threshold = attitude::state::ADC_Z_MID_VALUE;
+
+	uint16_t l_u16LimitThreshold = attitude::state::ADC_Z_MAX_VARIATION;
 	uint16_t l_u16TopLimit = l_u16Threshold + l_u16LimitThreshold;
 	uint16_t l_u16BottomLimit = l_u16Threshold - l_u16LimitThreshold;
 
 	uint16_t l_u16MinDelta = 30;
-	uint16_t l_u16Divider = 52;
+	uint16_t l_u16Divider = attitude::state::ADC_Z_SCREEN_FACTOR;
 
 	uint16_t l_u16Dif;
 	uint16_t l_u16Height;
 
 	Graphics_Rectangle l_stRectBlue;
 	Graphics_Rectangle l_stRectBrown;
-
 	if (this->m_u16Z > l_u16Threshold) {
 		l_u16Dif = (this->m_u16Z - l_u16Threshold) / l_u16Divider;
-		l_u16Height = 64 - l_u16Dif;
+		l_u16Height = (attitude::state::SCREEN_Y / 2) - l_u16Dif;
 	} else {
 		l_u16Dif = (l_u16Threshold - this->m_u16Z) / l_u16Divider;
-		l_u16Height = 64 + l_u16Dif;
+		l_u16Height = (attitude::state::SCREEN_Y / 2) + l_u16Dif;
 	}
 
 	if ((this->m_u16Z > this->m_u16OldZValue &&
@@ -66,20 +113,29 @@ void task::RefreshScreenBackground::repaintScreen() {
 		if (this->m_u16Z > l_u16TopLimit) {
 			l_u16Height = 0;
 		} else if (this->m_u16Z < l_u16BottomLimit) {
-			l_u16Height = 127;
+			l_u16Height = attitude::state::SCREEN_Y;
 		}
 
+		this->getState()->setAccelerometerX(this->m_u16X);
+		this->getState()->setAccelerometerZ(this->m_u16Z);
+
+		this->getState()->setB(this->getState()->calculateB());
+		this->getState()->setM(this->getState()->calculateM());
+
 		Graphics_Context* l_pGraphicsContext = this->getContext();
-		l_stRectBlue = {0, 0, 127, (uint8_t)l_u16Height};
-		l_stRectBrown = {0, 127, 127, (uint8_t)l_u16Height};
+		l_stRectBlue = {0, 0, attitude::state::SCREEN_X, (uint8_t)l_u16Height};
+		l_stRectBrown = {0, attitude::state::SCREEN_Y, attitude::state::SCREEN_X,
+		                 (uint8_t)l_u16Height};
 		Graphics_setForegroundColor(l_pGraphicsContext, GRAPHICS_COLOR_LIGHT_BLUE);
 		Graphics_fillRectangle(l_pGraphicsContext, &l_stRectBlue);
 		Graphics_setForegroundColor(l_pGraphicsContext, GRAPHICS_COLOR_PERU);
 		Graphics_fillRectangle(l_pGraphicsContext, &l_stRectBrown);
 
-		Graphics_setForegroundColor(l_pGraphicsContext, GRAPHICS_COLOR_WHITE);
-		Graphics_drawLine(l_pGraphicsContext, 0, l_u16Height, 127, l_u16Height);
-
+		Graphics_setForegroundColor(l_pGraphicsContext, GRAPHICS_COLOR_BLACK);
+		Graphics_drawLine(l_pGraphicsContext, this->getState()->getPointAX(),
+		                  this->getState()->getPointAY(),
+		                  this->getState()->getPointBX(),
+		                  this->getState()->getPointBY());
 		int i, maxi;
 		uint8_t j, k;
 		uint8_t l_u8LongLineHalfLenght = 8;
@@ -134,4 +190,16 @@ void task::RefreshScreenBackground::setContext(Graphics_Context* i_pContext) {
 
 Graphics_Context* task::RefreshScreenBackground::getContext(void) {
 	return task::RefreshScreenBackground::m_pContext;
+}
+
+attitude::State* task::RefreshScreenBackground::getState(void) {
+	return this->m_pState;
+}
+
+attitude::State* task::RefreshScreenBackground::getOldState(void) {
+	return this->m_pOldState;
+}
+
+void task::RefreshScreenBackground::setState(attitude::State* i_pState) {
+	this->m_pState = i_pState;
 }

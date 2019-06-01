@@ -11,6 +11,12 @@
 #include "task/Accelerometer.hpp"
 #include "task/LED.hpp"
 #include "task/RefreshScreenBackground.hpp"
+#include "task/RefreshScreenRollIndicator.hpp"
+
+#include <stdbool.h>
+#include <stdint.h>
+#include "debug/printf.hpp"
+#include "driverlib.h"
 
 // ##########################
 // Global/Static declarations
@@ -23,8 +29,21 @@ mkii::Led* g_pRedLed =
     new mkii::Led(peripheral::gpio::Port::PORT1, peripheral::gpio::Pin::PIN0);
 
 Graphics_Context* g_pContext;
+Graphics_Context* g_pContextCircle;
 
 void T32_INT1_IRQHandler(void);
+
+const eUSCI_UART_Config uartConfig = {
+    EUSCI_A_UART_CLOCKSOURCE_SMCLK,                // SMCLK Clock Source
+    78,                                            // BRDIV = 78
+    2,                                             // UCxBRF = 2
+    0,                                             // UCxBRS = 0
+    EUSCI_A_UART_NO_PARITY,                        // No Parity
+    EUSCI_A_UART_LSB_FIRST,                        // MSB First
+    EUSCI_A_UART_ONE_STOP_BIT,                     // One stop bit
+    EUSCI_A_UART_MODE,                             // UART mode
+    EUSCI_A_UART_OVERSAMPLING_BAUDRATE_GENERATION  // Oversampling
+};
 
 // #########################
 //          MAIN
@@ -37,13 +56,18 @@ void main(void) {
 	peripheral::LcdScreen* l_pLcdScreen =
 	    new peripheral::LcdScreen(new peripheral::lcdScreen::Spi());
 	task::RefreshScreenBackground* l_pRefreshScreenBackground =
-	    new task::RefreshScreenBackground(l_pLcdScreen, g_pContext);
+	    new task::RefreshScreenBackground(new attitude::State(8192, 8192),
+	                                      l_pLcdScreen, g_pContext);
+	task::RefreshScreenRollIndicator* l_pRefreshScreenRollIndicator =
+	    new task::RefreshScreenRollIndicator(l_pLcdScreen, g_pContextCircle,
+	                                         g_pContext);
 	task::LED* RedLED = new task::LED(g_pRedLed);
 
 	g_pRedLed->SetState(true);
 
 	g_MainScheduler.attach(l_pAccelerometerTask, 10);
-	g_MainScheduler.attach(l_pRefreshScreenBackground, 10);
+	g_MainScheduler.attach(l_pRefreshScreenBackground, 20);
+	// g_MainScheduler.attach(l_pRefreshScreenRollIndicator, 20);
 	g_MainScheduler.attach(RedLED, 500);
 
 	g_MainScheduler.setup();
@@ -90,8 +114,29 @@ void Setup(void) {
 	l_pTimer->SetCounter(TIMER32_COUNT);
 	l_pTimer->SetInterrupt(T32_INT1_IRQHandler);
 
+	/* Setup debug */
+	debugSetup();
+	printf(EUSCI_A0_BASE, "Hola");
+
 	/* Enable Interrupts */
 	MAP_Interrupt_enableMaster();
+
+	return;
+}
+
+// ***********************************
+// Setup function for debug using UART
+// ***********************************
+void debugSetup() {
+	/* Selecting P1.2 and P1.3 in UART mode */
+	MAP_GPIO_setAsPeripheralModuleFunctionInputPin(
+	    GPIO_PORT_P1, GPIO_PIN1 | GPIO_PIN2 | GPIO_PIN3,
+	    GPIO_PRIMARY_MODULE_FUNCTION);
+	/* Configuring UART Module */
+	MAP_UART_initModule(EUSCI_A0_BASE, &uartConfig);
+
+	/* Enable UART module */
+	MAP_UART_enableModule(EUSCI_A0_BASE);
 
 	return;
 }

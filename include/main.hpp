@@ -7,5 +7,6 @@
 #define TIMER32_COUNT 48e3
 
 void Setup(void);
+void debugSetup(void);
 
 #endif /* MAIN_HPP_ */
